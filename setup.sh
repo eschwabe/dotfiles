@@ -4,7 +4,7 @@
 # Variables
 #-----------------------------------------------------------------------------
 backupdir="$HOME/.dotfiles-backup/$(date "+%Y%m%d%H%M.%S")"
-excluded=(. .. .git .gitignore setup.sh README)
+excluded=(. .. .git .gitignore .gitmodules setup.sh README.md)
 included=()
 
 #-----------------------------------------------------------------------------
