@@ -4,8 +4,7 @@
 # Variables
 #-----------------------------------------------------------------------------
 backupdir="$HOME/.dotfiles-backup/$(date "+%Y%m%d%H%M.%S")"
-excluded=(. .. .git .gitignore .gitmodules setup.sh README.md)
-included=()
+filelist=(.bash-it .fonts .oh-my-zsh .vimrc .zshrc)
 
 #-----------------------------------------------------------------------------
 # Functions
@@ -17,23 +16,6 @@ function log_notice()     { echo "\033[1;32m➜ $1\033[0m"; }
 function log_error()      { echo "\033[1;31mError: $1\033[0m"; }
 function log_list_check() { echo "  \033[1;32m✔\033[0m $1"; }
 function log_list_error() { echo "  \033[1;31m✖\033[0m $1"; }
-
-# create array of files to manipulate
-# sets the filelist global variable
-function initialize() {
-  local files=( $(ls -a) )
-  index=0
-  for file in "${files[@]}"; do
-    for exclude in "${excluded[@]}"; do
-      if [[ "$exclude" == "$file" ]]; then
-        unset files[$index]
-      fi
-    done
-    index=$index+1
-  done
-  filelist=("${files[@]}" "${included[@]}")
-  return 0
-}
 
 # backup home directory contents
 function backup() {
@@ -54,6 +36,7 @@ function backup() {
 function install() {
   sourcedir="`pwd`"
   for file in "${filelist[@]}"; do
+    rm -rf "$HOME/$file"
     ln -s -f "$sourcedir/$file" "$HOME/$file"
     if [[ "$?" -eq 0 ]]; then
       log_list_check "$file"
@@ -103,9 +86,6 @@ HELP
 exit; fi
 
 log_notice 'DOTFILES - Eric Schwabe'
-
-filelist=()
-initialize
 
 #-----------------------------------------------------------------------------
 # Commands
