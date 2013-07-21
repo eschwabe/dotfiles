@@ -12,7 +12,7 @@ POWERLINE_NO_BLANK_LINE="true"
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME=""
+ZSH_THEME="clean"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -50,7 +50,6 @@ DISABLE_AUTO_UPDATE="true"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-source $HOME/.oh-my-zsh-powerline-theme/powerline.zsh-theme
 
 # Customize to your needs...
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin

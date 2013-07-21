@@ -1,145 +1,108 @@
 #!/bin/sh
+# vim: set tabstop=2 shiftwidth=2
 
 #-----------------------------------------------------------------------------
 # Variables
 #-----------------------------------------------------------------------------
-backupdir="$HOME/.dotfiles-backup/$(date "+%Y%m%d%H%M.%S")"
-filelist=(.bash-it .fonts .oh-my-zsh .vimrc .zshrc)
+BACKUPDIR="$HOME/.dotfiles-backup/$(date "+%Y%m%d%H%M.%S")"
+REPODIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 #-----------------------------------------------------------------------------
 # Functions
 #-----------------------------------------------------------------------------
 
 # logging
-# $1 - message
 function log_notice()     { echo "\033[1;32m➜ $1\033[0m"; }
 function log_error()      { echo "\033[1;31mError: $1\033[0m"; }
 function log_list_check() { echo "  \033[1;32m✔\033[0m $1"; }
 function log_list_error() { echo "  \033[1;31m✖\033[0m $1"; }
 
-# backup home directory contents
+# backup file to backup directory
+# 1: target file or directory to move into backup directory
 function backup() {
-  mkdir -p $backupdir
-  for file in "${filelist[@]}"; do
-    if [[ -e "$HOME/$file" && ! -L "$HOME/$file" ]]; then
-      cp -a -f "$HOME/$file" "$backupdir/$file"
-      if [[ "$?" -eq 0 ]]; then
-        log_list_check "$HOME/$file"
-      else
-        log_list_error "$HOME/$file"
-      fi
-    fi
-  done
+  mkdir -p "$BACKUPDIR"
+  mv "$1" "$BACKUPDIR"
+  if [[ "$?" -eq 0 ]]; then
+    log_list_check "(Backup)  $HOME/$file"
+  else
+    log_list_error "(Backup)  $HOME/$file"
+  fi
 }
 
-# link source directory contents to home directory
+# link file from the repository to home directory
+# 1: source file or directory in repository
+# 2: target link in user home directory
+function link() {
+  mkdir -p $( dirname "$2" )
+  ln -s "$1" "$2"
+  if [[ "$?" -eq 0 ]]; then
+    log_list_check "(Install) $HOME/$file"
+  else
+    log_list_error "(Install) $HOME/$file"
+  fi
+}
+
+# install file from the repository to user home directory
+# 1: source file or directory in repository ($REPODIR)
+# 2: target link in user home directory ($HOME)
 function install() {
-  sourcedir="`pwd`"
-  for file in "${filelist[@]}"; do
-    rm -rf "$HOME/$file"
-    ln -s -f "$sourcedir/$file" "$HOME/$file"
-    if [[ "$?" -eq 0 ]]; then
-      log_list_check "$file"
-    else
-      log_list_error "$file"
-    fi
-  done
-}
-
-# remove links in home directory
-function remove() {
-  for file in "${filelist[@]}"; do
-    unlink "$HOME/$file"
-    if [[ "$?" -eq 0 ]]; then
-      log_list_check "$file"
-    else
-      log_list_error "$file"
-    fi
-  done 
-}
-
-# configure system to use dotfiles
-function configure() {
-  echo "Configure files here"
-  #
-  # vundle setup
-  # sublime text
-  # oh-my-zsh
-  # oh-my-zsh-powerline theme
-  # bash-it
-  # change default shell to zsh?
-  # fonts
-  #
+  SRC="$REPODIR/$1"
+  DEST="$HOME/$2"
+  if [[ -e "$DEST" && ! -L "$DEST" ]]; then
+    backup "$DEST"
+  elif [[ -L "$DEST" ]]; then
+    unlink "$DEST"
+  fi
+  link "$SRC" "$DEST"
 }
 
 #-----------------------------------------------------------------------------
 # Main
 #-----------------------------------------------------------------------------
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then cat <<HELP
-Usage: $(basename "$0") [install|remove]
-  install - Update dotfiles and link to home directory
-  remove  - Remove all links in home directory
+Usage: $(basename "$0") - https://github.com/eschwabe/dotfiles
 
-See the README for documentation.
-https://github.com/eschwabe/dotfiles
+Updates and installs dotfiles from this repository. The dotfiles are linked
+to the current user's home directory. See the README for documentation.
 HELP
-exit; fi
-
-log_notice 'DOTFILES - Eric Schwabe'
-
-#-----------------------------------------------------------------------------
-# Commands
-#-----------------------------------------------------------------------------
-if [[ -z "$1" || "$1" == "install" ]]; then
-
-  if [[ ! "$(type -p git)" ]]; then
-    log_error "Git required to install"
-    exit
-  fi
-
-  if [ -d $HOME/.dotfiles ]; then
-    # Update Repos
-    pushd $HOME/.dotfiles >/dev/null
-    log_notice "Updating"
-    git pull origin master
-    git submodule init
-    git submodule update
-  else
-    # Clone Repos
-    log_notice "Downloading"
-    git clone --recursive https://github.com/eschwabe/dotfiles.git $HOME/.dotfiles
-    pushd $HOME/.dotfiles >/dev/null
-  fi
-
-  # Backup
-  log_notice "Backup up old files ($backupdir)"
-  backup
-
-  # Install
-  log_notice "Installing"
-  install
-
-  # Setup
-  log_notice "Setting Up"
-  configure
-
-  # Cleanup
-  popd >/dev/null
-  log_notice "Done"
-
-elif [[ "$1" == "remove" ]]; then
-  # Remove links
-  log_notice "Removing"
-  pushd $HOME/.dotfiles >/dev/null
-  remove
-
-  # Cleanup
-  popd >/dev/null
-  log_notice "Done"
-
-else
-  log_error "Unknown Command ($1)"
-  exit
-
+exit; 
 fi
+
+# Test if git is in path
+if [[ ! "$(type -p git)" ]]; then
+  log_error "Git required to setup"
+  exit
+fi
+
+# Initialize
+log_notice 'DOTFILES - Eric Schwabe'
+pushd "$REPODIR" >/dev/null
+
+# Update Repos
+log_notice "Updating"
+git pull origin master
+git submodule init
+git submodule update
+
+# Install
+log_notice "Installing"
+
+install "vim/bundle"    ".vim/bundle"
+install "vim/vimrc"     ".vimrc"
+install "zsh/oh-my-zsh" ".oh-my-zsh"
+install "zsh/zshrc"     ".zshrc"
+
+# Install (Linux)
+if [[ "$OSTYPE" == linux* ]]; then
+install "fonts/powerline-fonts" ".fonts"
+fi
+
+# Install (OSX)
+if [[ "$OSTYPE" == darwin* ]]; then
+install "fonts/powerline-fonts" "Library/Fonts/Powerline-Fonts"
+fi
+
+# Cleanup
+popd >/dev/null
+log_notice "Done"
 
