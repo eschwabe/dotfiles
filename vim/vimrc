@@ -1,11 +1,7 @@
 " VIM CONFIGURATION 
 "
-" Maintained by Eric Schwabe <eric.r.schwabe@boeing.com>
+" Maintained by Eric Schwabe
 "
-" https://github.com/nvie/vimrc/blob/master/vimrc
-" http://www.vi-improved.org/vimrc.php
-" http://nvie.com/posts/how-i-boosted-my-vim/
-" 
 " To start vim without using this .vimrc file, use:
 " vim -u NORC
 "
@@ -30,7 +26,6 @@ set runtimepath+=~/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'Lokaltog/powerline', { 'rtp': 'powerline/bindings/vim/' }
-Bundle 'daylerees/colour-schemes', { 'rtp': 'vim-themes/' }
 Bundle 'tomasr/molokai'
 Bundle 'scrooloose/nerdtree'
 Bundle 'SirVer/ultisnips'
