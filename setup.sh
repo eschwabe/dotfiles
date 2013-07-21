@@ -8,7 +8,27 @@ BACKUPDIR="$HOME/.dotfiles-backup/$(date "+%Y%m%d%H%M.%S")"
 REPODIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 #-----------------------------------------------------------------------------
-# Functions
+# Run Function
+#-----------------------------------------------------------------------------
+function run() {
+  install "vim/bundle/vundle"   ".vim/bundle/vundle"
+  install "vim/vimrc"           ".vimrc"
+  install "zsh/oh-my-zsh"       ".oh-my-zsh"
+  install "zsh/zshrc"           ".zshrc"
+
+  # Install (Linux)
+  if [[ "$OSTYPE" == linux* ]]; then
+  install "fonts/powerline-fonts" ".fonts/powerline-fonts"
+  fi
+
+  # Install (OSX)
+  if [[ "$OSTYPE" == darwin* ]]; then
+  install "fonts/powerline-fonts" "Library/Fonts/Powerline-Fonts"
+  fi
+}
+
+#-----------------------------------------------------------------------------
+# Support Functions
 #-----------------------------------------------------------------------------
 
 # logging
@@ -23,9 +43,9 @@ function backup() {
   mkdir -p "$BACKUPDIR"
   mv "$1" "$BACKUPDIR"
   if [[ "$?" -eq 0 ]]; then
-    log_list_check "(Backup)  $HOME/$file"
+    log_list_check "(Backup)  $1 to $BACKUPDIR"
   else
-    log_list_error "(Backup)  $HOME/$file"
+    log_list_error "(Backup)  $1"
   fi
 }
 
@@ -36,9 +56,9 @@ function link() {
   mkdir -p $( dirname "$2" )
   ln -s "$1" "$2"
   if [[ "$?" -eq 0 ]]; then
-    log_list_check "(Install) $HOME/$file"
+    log_list_check "(Install) $2"
   else
-    log_list_error "(Install) $HOME/$file"
+    log_list_error "(Install) $2"
   fi
 }
 
@@ -84,23 +104,9 @@ git pull origin master
 git submodule init
 git submodule update
 
-# Install
+# Run Install
 log_notice "Installing"
-
-install "vim/bundle"    ".vim/bundle"
-install "vim/vimrc"     ".vimrc"
-install "zsh/oh-my-zsh" ".oh-my-zsh"
-install "zsh/zshrc"     ".zshrc"
-
-# Install (Linux)
-if [[ "$OSTYPE" == linux* ]]; then
-install "fonts/powerline-fonts" ".fonts"
-fi
-
-# Install (OSX)
-if [[ "$OSTYPE" == darwin* ]]; then
-install "fonts/powerline-fonts" "Library/Fonts/Powerline-Fonts"
-fi
+run
 
 # Cleanup
 popd >/dev/null
