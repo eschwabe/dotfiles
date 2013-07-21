@@ -22,18 +22,20 @@ let NERDTreeStatusline=''
 
 filetype off
 
-set runtimepath+=~/.vim/bundle/vundle/
-call vundle#rc()
-Bundle 'gmarik/vundle'
-Bundle 'Lokaltog/powerline', { 'rtp': 'powerline/bindings/vim/' }
-Bundle 'tomasr/molokai'
-Bundle 'scrooloose/nerdtree'
-Bundle 'SirVer/ultisnips'
-Bundle 'kien/ctrlp.vim'
-Bundle 'ervandew/supertab'
-Bundle 'scrooloose/syntastic'
-"Bundle 'fholgado/minibufexpl.vim'
-"Bundle 'Valloric/YouCompleteMe'
+if isdirectory("~/.vim/bundle/vundle")
+  set runtimepath+=~/.vim/bundle/vundle/
+  call vundle#rc()
+  Bundle 'gmarik/vundle'
+  Bundle 'Lokaltog/powerline', { 'rtp': 'powerline/bindings/vim/' }
+  Bundle 'tomasr/molokai'
+  Bundle 'scrooloose/nerdtree'
+  Bundle 'SirVer/ultisnips'
+  Bundle 'kien/ctrlp.vim'
+  Bundle 'ervandew/supertab'
+  Bundle 'scrooloose/syntastic'
+  "Bundle 'fholgado/minibufexpl.vim'
+  "Bundle 'Valloric/YouCompleteMe'
+endif
 
 filetype plugin indent on
 

@@ -11,19 +11,20 @@ REPODIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Run Function
 #-----------------------------------------------------------------------------
 function run() {
-  install "vim/bundle/vundle"   ".vim/bundle/vundle"
-  install "vim/vimrc"           ".vimrc"
-  install "zsh/oh-my-zsh"       ".oh-my-zsh"
-  install "zsh/zshrc"           ".zshrc"
+  link "vim/bundle/vundle"   ".vim/bundle/vundle"
+  link "vim/vimrc"           ".vimrc"
+  link "zsh/oh-my-zsh"       ".oh-my-zsh"
+  link "zsh/zshrc"           ".zshrc"
+  ecmd "bin/git-conf.sh"
 
   # Install (Linux)
   if [[ "$OSTYPE" == linux* ]]; then
-  install "fonts/powerline-fonts" ".fonts/powerline-fonts"
+  link "fonts/powerline-fonts" ".fonts/powerline-fonts"
   fi
 
   # Install (OSX)
   if [[ "$OSTYPE" == darwin* ]]; then
-  install "fonts/powerline-fonts" "Library/Fonts/Powerline-Fonts"
+  link "fonts/powerline-fonts" "Library/Fonts/Powerline-Fonts"
   fi
 }
 
@@ -43,29 +44,17 @@ function backup() {
   mkdir -p "$BACKUPDIR"
   mv "$1" "$BACKUPDIR"
   if [[ "$?" -eq 0 ]]; then
-    log_list_check "(Backup)  $1 to $BACKUPDIR"
+    log_list_check "(Backup) $1 to $BACKUPDIR"
   else
-    log_list_error "(Backup)  $1"
+    log_list_error "(Backup) $1"
   fi
 }
 
 # link file from the repository to home directory
-# 1: source file or directory in repository
-# 2: target link in user home directory
-function link() {
-  mkdir -p $( dirname "$2" )
-  ln -s "$1" "$2"
-  if [[ "$?" -eq 0 ]]; then
-    log_list_check "(Install) $2"
-  else
-    log_list_error "(Install) $2"
-  fi
-}
-
-# install file from the repository to user home directory
+# creates a backup of existing file if it exists
 # 1: source file or directory in repository ($REPODIR)
 # 2: target link in user home directory ($HOME)
-function install() {
+function link() {
   SRC="$REPODIR/$1"
   DEST="$HOME/$2"
   if [[ -e "$DEST" && ! -L "$DEST" ]]; then
@@ -73,7 +62,42 @@ function install() {
   elif [[ -L "$DEST" ]]; then
     unlink "$DEST"
   fi
-  link "$SRC" "$DEST"
+  mkdir -p $( dirname "$DEST" )
+  ln -s "$SRC" "$DEST"
+  if [[ "$?" -eq 0 ]]; then
+    log_list_check "(Link)   $DEST"
+  else
+    log_list_error "(Link)   $DEST"
+  fi
+}
+
+# copy file from the repository to user home directory
+# does not overwrite file if it already exists
+# 1: source file or directory in repository ($REPODIR)
+# 2: target link in user home directory ($HOME)
+function copy() {
+  SRC="$REPODIR/$1"
+  DEST="$HOME/$2"
+  if [[ ! -e "$DEST" || -L "$DEST" ]]; then
+    cp -a "$SRC" "$DEST"
+    if [[ "$?" -eq 0 ]]; then
+      log_list_check "(Copy)   $DEST"
+    else
+      log_list_error "(Copy)   $DEST"
+    fi
+  fi
+}
+
+# executes a command from the repository
+# 1: command to run in the repository ($REPODIR)
+function ecmd() {
+  CMD="$REPODIR/$1"
+  "$CMD"
+  if [[ "$?" -eq 0 ]]; then
+    log_list_check "(Exec)   $1"
+  else
+    log_list_error "(Exec)   $1"
+  fi
 }
 
 #-----------------------------------------------------------------------------
