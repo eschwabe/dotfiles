@@ -14,8 +14,6 @@ set nocompatible
 " Change mapleader from \ to ,
 let mapleader=","
 
-
-set shortmess=a
 " ----------------------------------------------------------------------------
 " VUNDLE INITIALIZATION
 " ----------------------------------------------------------------------------
@@ -47,6 +45,9 @@ set statusline=%t%m%r%h%w\ [%{&ff}\ %Y]\ [%l/%L\ (%p%%)]\ [col=%c\ val=0x%B]
 
 " Set default tags file locations
 set tags+=tags,build/tags
+
+" Set default colorscheme
+colorscheme molokai
 
 " ----------------------------------------------------------------------------
 " EDITING

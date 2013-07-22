@@ -9,11 +9,12 @@ Bundle 'gmarik/vundle'
 Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/syntastic'
+Bundle 'thinca/vim-fontzoom'
 
 if has("python") || has("python3")
-    Bundle 'Lokaltog/powerline', { 'rtp': 'powerline/bindings/vim/' }
-    Bundle 'SirVer/ultisnips'
-    Bundle 'Valloric/YouCompleteMe'
+  Bundle 'Lokaltog/powerline', { 'rtp': 'powerline/bindings/vim/' }
+  Bundle 'SirVer/ultisnips'
+  Bundle 'Valloric/YouCompleteMe'
 endif
 
 filetype plugin indent on

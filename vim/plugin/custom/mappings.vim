@@ -1,37 +1,35 @@
-" MAPPINGS
-" {{{
-  " set paste toggle
-  set pastetoggle=<F3>
+" Keyboard Mappings
 
-  " edit and update vimrc
-  nmap <leader>ev :e $MYVIMRC<CR>     
-  nmap <leader>sv :source $MYVIMRC<CR> 
+" set paste toggle
+set pastetoggle=<F3>
 
-  " replace tabs with spaces
-  nmap <leader>ft <ESC>:%s/	/    /g<CR> 
+" edit and update vimrc
+nmap <leader>ev :e $MYVIMRC<CR>
+nmap <leader>sv :source $MYVIMRC<CR> 
 
-  " open plugin windows
-  nmap <F1> :NERDTreeToggle<CR> 
-  nmap <F2> :TagbarToggle<CR>
+" replace tabs with spaces
+nmap <leader>ft <ESC>:%s/	/    /g<CR> 
 
-  " clear search highlights
-  nmap <leader>h :noh<CR>
+" open plugin windows
+nmap <F2> :NERDTreeToggle<CR> 
 
-  " make
-  nmap <leader>m :make! -C build<CR>
-  nmap <leader>d :make! -C build ctags cscope<CR>
+" clear search highlights
+nmap <leader>h :noh<CR>
 
-  " viewport control (left, down, up, right)
-  nmap <leader>h <C-w>h
-  nmap <leader>j <C-w>j
-  nmap <leader>k <C-w>k
-  nmap <leader>l <C-w>l
+" make commands
+nmap <leader>m :make! -C build<CR>
+nmap <leader>d :make! -C build ctags cscope<CR>
 
-  " follow tags
-  nmap <C-Left> <C-T>
-  nmap <C-Right> <C-]>
+" viewport control (left, down, up, right)
+nmap <leader>h <C-w>h
+nmap <leader>j <C-w>j
+nmap <leader>k <C-w>k
+nmap <leader>l <C-w>l
 
-  nmap <C-Tab> :bn<CR>
+" follow tags
+nmap <leader>tn <C-T>
+nmap <leader>tp <C-]>
 
-" }}}
+" next buffer
+nmap <C-Tab> :bn<CR>
 

@@ -1,4 +1,4 @@
-  " Python
-  autocmd FileType python set omnifunc=pythoncomplete#Complete
-  "autocmd FileType python VimEnter * TagbarOpen
+" Python Filetype Settings
+
+autocmd FileType python set omnifunc=pythoncomplete#Complete
 

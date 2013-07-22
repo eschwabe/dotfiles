@@ -1,29 +1,4 @@
-set guifont=Ubuntu\ Mono\ derivative\ Powerline\ 11
-colorscheme molokai
+" System specific GUI options
 
-" GUI  
-" {{{
-  if has("gui_running")
-    
-    "colorscheme wombat
-    "highlight SignColumn guifg=#808080 guibg=#303030 gui=none
+set guifont=Ubuntu\ Mono\ derivative\ Powerline\ 14
 
-    set guitablabel=%t\ %m%r            " tab label
-    "set guifont=Liberation\ Mono\ 9     " font
-    set guifont=Ubuntu\ Mono\ derivative\ Powerline\ 11     " font
-    set guioptions-=m                   " remove toolbar
-    set guioptions-=l                   " simple dialogs, no popups
-    set guioptions-=L                   " simple dialogs, no popups
-    set guioptions-=r                   " simple dialogs, no popups
-    set guioptions-=R                   " simple dialogs, no popups
-    set title                           " show window title
-  
-    " switch fonts in gui mode
-    map <F10>  <ESC>:set guifont=Liberation\ Mono\ 9<CR>
-    map <F11> <ESC>:set guifont=Liberation\ Mono\ 12<CR>
-    map <F12> <ESC>:set guifont=Liberation\ Mono\ 16<CR>
-
-  else
-    set background=dark
-
-  endif
