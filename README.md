@@ -6,11 +6,12 @@ installed in a user directory with links to dotfiles in $HOME. The dotfiles
 include configuration for zsh, vim, fonts, git, and other tools.
 
 ## Installation
+```
 git clone https://github.com/eschwabe/dotfiles ~/.dotfiles
 ~/.dotfiles/setup.sh
+```
 
 ## References
-Oh-My-ZSH
-https://github.com/robbyrussell/oh-my-zsh
-https://github.com/mathiasbynens/dotfiles
+* https://github.com/robbyrussell/oh-my-zsh
+* https://github.com/mathiasbynens/dotfiles
 
