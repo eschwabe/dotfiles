@@ -11,10 +11,13 @@ REPODIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Run Function
 #-----------------------------------------------------------------------------
 function run() {
-  link "vim/bundle/vundle"   ".vim/bundle/vundle"
-  link "vim/vimrc"           ".vimrc"
-  link "zsh/oh-my-zsh"       ".oh-my-zsh"
-  link "zsh/zshrc"           ".zshrc"
+  link "vim/vimrc"                ".vimrc"
+  copy "vim/gvimrc"               ".gvimrc"
+  link "vim/bundles.vim"          ".vim/bundles.vim"
+  link "vim/plugin/custom"        ".vim/plugin/custom"
+  link "vim/colors/molokai.vim"   ".vim/colors/molokai.vim"
+  link "zsh/oh-my-zsh"            ".oh-my-zsh"
+  link "zsh/zshrc"                ".zshrc"
   ecmd "bin/git-conf.sh"
 
   # Install (Linux)
@@ -79,6 +82,7 @@ function copy() {
   SRC="$REPODIR/$1"
   DEST="$HOME/$2"
   if [[ ! -e "$DEST" || -L "$DEST" ]]; then
+    rm "$DEST"
     cp -a "$SRC" "$DEST"
     if [[ "$?" -eq 0 ]]; then
       log_list_check "(Copy)   $DEST"
