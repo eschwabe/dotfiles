@@ -11,6 +11,9 @@ REPODIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Run Function
 #-----------------------------------------------------------------------------
 function run() {
+  link "bash/bashrc"              ".bashrc"
+  link "bash/bash_profile"        ".bash_profile"
+  link "bash/bash_prompt"         ".bash_prompt"
   link "ssh/config"               ".ssh/config"
   link "vim/vimrc"                ".vimrc"
   copy "vim/gvimrc"               ".gvimrc"
