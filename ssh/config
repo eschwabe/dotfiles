@@ -1,0 +1,10 @@
+Host *
+
+# Forward ssh agent to the remote machine
+ForwardAgent yes
+
+# Automatically add all common hosts to the host file
+StrictHostKeyChecking no
+
+# Forward X11 over ssh connection
+ForwardX11 yes

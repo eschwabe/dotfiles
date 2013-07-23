@@ -11,6 +11,7 @@ REPODIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Run Function
 #-----------------------------------------------------------------------------
 function run() {
+  link "ssh/config"               ".ssh/config"
   link "vim/vimrc"                ".vimrc"
   copy "vim/gvimrc"               ".gvimrc"
   link "vim/bundles.vim"          ".vim/bundles.vim"
