@@ -50,6 +50,18 @@ set tags+=tags,build/tags
 colorscheme molokai
 
 " ----------------------------------------------------------------------------
+" UNDO
+" ----------------------------------------------------------------------------
+if !isdirectory(expand("$HOME/.vim/backups"))
+    call mkdir(expand("$HOME/.vim/backups"))
+endif
+
+if version >= 703
+  set undodir=~/.vim/backups
+  set undofile
+endif
+
+" ----------------------------------------------------------------------------
 " EDITING
 " ----------------------------------------------------------------------------
 set number                      " Show line numbers
@@ -71,15 +83,6 @@ filetype plugin indent on       " Load filetype and indent plugins
 
 " Display tabs and trailing spaces
 set list listchars=tab:\ \ ,trail:·
-
-" ----------------------------------------------------------------------------
-" UNDO
-" ----------------------------------------------------------------------------
-if !isdirectory(expand("$HOME/.vim/backups"))
-    call mkdir(expand("$HOME/.vim/backups"))
-endif
-set undodir=~/.vim/backups
-set undofile
 
 " ----------------------------------------------------------------------------
 " FOLDING
