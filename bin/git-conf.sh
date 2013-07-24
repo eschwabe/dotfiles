@@ -13,7 +13,7 @@ git config --global color.interactive auto
 # user-friendly paging of some commands which don't use the pager by default
 # (other commands like "git log" already do)
 # to override pass --no-pager or GIT_PAGER=cat
-git config --global pager.status true
+git config --global pager.status false
 git config --global pager.show-branch true
 
 # shortcut aliases
@@ -28,3 +28,7 @@ git config --global format.numbered auto
 # turn on new 1.5 features which break backwards compatibility
 git config --global core.legacyheaders false
 git config --global repack.usedeltabaseoffset true
+
+# default to pushing current branch to remote if no refspec specified
+# remote branch with the same name must exist
+git config --global push.default simple
