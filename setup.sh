@@ -41,10 +41,8 @@ function run() {
 #-----------------------------------------------------------------------------
 
 # logging
-function log_notice()     { echo "\033[1;32m➜ $1\033[0m"; }
-function log_error()      { echo "\033[1;31mError: $1\033[0m"; }
-function log_list_check() { echo "  \033[1;32m✔\033[0m $1"; }
-function log_list_error() { echo "  \033[1;31m✖\033[0m $1"; }
+function log_list_check() { echo -e "  \033[1;32m✔\033[0m $1"; }
+function log_list_error() { echo -e "  \033[1;31m✖\033[0m $1"; }
 
 # backup file to backup directory
 # 1: target file or directory to move into backup directory
@@ -115,8 +113,7 @@ function ecmd() {
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then cat <<HELP
 Usage: $(basename "$0") - https://github.com/eschwabe/dotfiles
 
-Updates and installs dotfiles from this repository. The dotfiles are linked
-to the current user's home directory. See the README for documentation.
+Installs dotfiles from this repository into the current user's home directory.
 HELP
 exit; 
 fi
@@ -128,20 +125,11 @@ if [[ ! "$(type -p git)" ]]; then
 fi
 
 # Initialize
-log_notice 'DOTFILES - Eric Schwabe'
 pushd "$REPODIR" >/dev/null
 
-# Update Repos
-log_notice "Updating"
-git pull origin master
-git submodule init
-git submodule update
-
 # Run Install
-log_notice "Installing"
 run
 
 # Cleanup
 popd >/dev/null
-log_notice "Done"
 
