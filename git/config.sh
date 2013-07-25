@@ -29,6 +29,5 @@ git config --global format.numbered auto
 git config --global core.legacyheaders false
 git config --global repack.usedeltabaseoffset true
 
-# default to pushing current branch to remote if no refspec specified
-# remote branch with the same name must exist
-git config --global push.default simple
+# default to pushing all branches with the same name to remote if no refspec specified
+git config --global push.default matching

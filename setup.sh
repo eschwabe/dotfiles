@@ -23,7 +23,7 @@ function run() {
   link "zsh/oh-my-zsh"            ".oh-my-zsh"
   link "zsh/zshrc"                ".zshrc"
   link "zsh/custom.zsh-theme"     ".oh-my-zsh/custom/custom.zsh-theme"
-  ecmd "bin/git-conf.sh"
+  ecmd "git/config.sh"
 
   # Install (Linux)
   if [[ "$OSTYPE" == linux* ]]; then
