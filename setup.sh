@@ -41,8 +41,8 @@ function run() {
 #-----------------------------------------------------------------------------
 
 # logging
-function log_list_check() { echo -e "  \033[1;32m✔\033[0m $1"; }
-function log_list_error() { echo -e "  \033[1;31m✖\033[0m $1"; }
+function log_list_check() { printf "  \033[1;32m✔\033[0m $1\n"; }
+function log_list_error() { printf "  \033[1;31m✖\033[0m $1\n"; }
 
 # backup file to backup directory
 # 1: target file or directory to move into backup directory

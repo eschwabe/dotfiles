@@ -11,8 +11,8 @@ REPODIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #-----------------------------------------------------------------------------
 
 # logging
-function log_notice()     { echo -e "\033[1;32m➜ $1\033[0m"; }
-function log_error()      { echo -e "\033[1;31mError: $1\033[0m"; }
+function log_notice()     { printf "\033[1;32m➜ $1\033[0m\n"; }
+function log_error()      { printf "\033[1;31mError: $1\033[0m\n"; }
 
 #-----------------------------------------------------------------------------
 # Main
