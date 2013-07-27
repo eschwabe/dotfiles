@@ -44,7 +44,7 @@ git submodule update
 
 # Run Install
 log_notice "Installing"
-./setup.sh
+./install.sh
 
 # Cleanup
 popd >/dev/null
