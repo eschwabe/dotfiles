@@ -7,4 +7,4 @@ ForwardAgent yes
 StrictHostKeyChecking no
 
 # Forward X11 over ssh connection
-ForwardX11 yes
+#ForwardX11 yes
