@@ -41,9 +41,11 @@ plugins=(cp git sublime vundle)
 # Load oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
+# Load any custom shell configuration
+for config_file ($HOME/.custom/*.sh); do
+  source $config_file
+done
+
 # Customize path
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
-
-# Use vi bindings
-bindkey -v
 

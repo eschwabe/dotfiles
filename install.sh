@@ -23,6 +23,7 @@ function run() {
   link "zsh/oh-my-zsh"            ".oh-my-zsh"
   link "zsh/zshrc"                ".zshrc"
   link "zsh/custom.zsh-theme"     ".oh-my-zsh/custom/custom.zsh-theme"
+  link "custom/example.sh"        ".custom/example.sh"
   ecmd "git/config.sh"
 
   # Install (Linux)
