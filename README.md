@@ -11,6 +11,15 @@ git clone https://github.com/eschwabe/dotfiles ~/.dotfiles
 ~/.dotfiles/install.sh
 ```
 
+## Update
+```
+~/.dotfiles/update.sh
+```
+
+## Customization
+Additional shell (bash or zsh) files may be added to the ~/.custom directory. Any
+files will be automatically sourced.
+
 ## References
 * https://github.com/robbyrussell/oh-my-zsh
 * https://github.com/revans/bash-it
