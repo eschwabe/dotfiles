@@ -9,10 +9,10 @@ Bundle 'gmarik/vundle'
 Bundle 'scrooloose/nerdtree'
 Bundle 'thinca/vim-fontzoom'
 Bundle 'kien/ctrlp.vim'
-Bundle 'scrooloose/syntastic'
 
 if version >= 703
   if has("python") || has("python3")
+    Bundle 'scrooloose/syntastic'
     Bundle 'Lokaltog/powerline', { 'rtp': 'powerline/bindings/vim/' }
     Bundle 'SirVer/ultisnips'
     Bundle 'Valloric/YouCompleteMe'
