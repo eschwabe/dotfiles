@@ -51,10 +51,10 @@ export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/
 
 # Set default editor
 export EDITOR="vim"
-export VISUAL="vim"
+export VISUAL="$EDITOR"
 
 # Set vi keybindings
-#bindkey -v
-#bindkey '^r' history-incremental-search-backward
-#bindkey '^a' beginning-of-line
-#bindkey '^e' end-of-line
+bindkey -v
+bindkey '^r' history-incremental-search-backward
+bindkey '^a' beginning-of-line
+bindkey '^e' end-of-line

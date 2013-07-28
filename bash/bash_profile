@@ -20,6 +20,7 @@ done
 
 # Set default editor
 EDITOR="vim"
+VISUAL="$EDITOR"
 
 # Customize path
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
