@@ -1,4 +1,4 @@
-# Eric Schwabe's dotfiles
+# Eric Schwabe's Dotfiles
 
 ## Overview
 Personal VIM configuration and plugins. The repository is setup to be
@@ -8,7 +8,7 @@ include configuration for zsh, vim, fonts, git, and other tools.
 ## Installation
 ```
 git clone https://github.com/eschwabe/dotfiles ~/.dotfiles
-~/.dotfiles/setup.sh
+~/.dotfiles/install.sh
 ```
 
 ## References
