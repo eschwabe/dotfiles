@@ -14,6 +14,8 @@ function run() {
   link "bash/bashrc"              ".bashrc"
   link "bash/bash_profile"        ".bash_profile"
   link "bash/lib"                 ".bash_profile.d"
+  link "readline/editrc"          ".editrc"
+  link "readline/inputrc"         ".inputrc"
   link "ssh/config"               ".ssh/config"
   link "vim/vimrc"                ".vimrc"
   copy "vim/gvimrc"               ".gvimrc"
