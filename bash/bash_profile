@@ -1,10 +1,6 @@
-# Add `~/bin` to the `$PATH`
-export PATH="$HOME/bin:$PATH"
-
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
+# Load the shell configuration in ~/.bash_profile.d
+LIB="${HOME}/.bash_profile.d/*.bash"
+for file in $LIB; do
 	[ -r "$file" ] && source "$file"
 done
 unset file
@@ -25,8 +21,13 @@ for option in autocd globstar; do
 	shopt -s "$option" 2> /dev/null
 done
 
-# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
-[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
+# Customize path
+export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
 
-# If possible, add tab completion for many more commands
-[ -f /etc/bash_completion ] && source /etc/bash_completion
+# Load custom shell configurations in ~/.custom
+CUSTOM="${HOME}/.custom/*.sh"
+for file in $CUSTOM; do
+	[ -r "$file" ] && source "$file"
+done
+unset file
+
