@@ -18,6 +18,9 @@ for option in autocd globstar; do
 	shopt -s "$option" 2> /dev/null
 done
 
+# Set default editor
+EDITOR="vim"
+
 # Customize path
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
 
@@ -27,4 +30,3 @@ for file in $CUSTOM; do
 	[ -r "$file" ] && source "$file"
 done
 unset file
-
