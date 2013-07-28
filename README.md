@@ -13,5 +13,7 @@ git clone https://github.com/eschwabe/dotfiles ~/.dotfiles
 
 ## References
 * https://github.com/robbyrussell/oh-my-zsh
+* https://github.com/revans/bash-it
 * https://github.com/mathiasbynens/dotfiles
+* https://github.com/skwp/dotfiles
 
