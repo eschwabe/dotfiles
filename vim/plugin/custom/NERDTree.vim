@@ -9,8 +9,8 @@ let NERDTreeStatusline=" "
 " close after opening file
 let NERDTreeQuitOnOpen = 0
 
-" ignore backup and swap files
-let NERDTreeIgnore = ['\.bak$', '\.swp$'] 
+" ignore backup, swap and compiled files
+let NERDTreeIgnore = ['\.bak$', '\.swp$', '\.pyc$']
 
 " sort files then directories
 let NERDTreeSortOrder = ['\/$', '*']
