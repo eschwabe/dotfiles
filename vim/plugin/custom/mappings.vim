@@ -33,3 +33,5 @@ nmap <leader>tp <C-]>
 " next buffer
 nmap <C-Tab> :bn<CR>
 
+nmap <leader>f :CtrlP<CR>
+nmap <leader>b :CtrlPBuffer<CR>
