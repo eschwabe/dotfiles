@@ -19,7 +19,7 @@ PROMPT="\
 %{$fg[black]%}at \
 %{$fg[green]%}%m \
 %{$fg[black]%}in \
-%{$terminfo[bold]$fg[yellow]%}%~%{$reset_color%}\
+%{$terminfo[bold]$fg[red]%}%~%{$reset_color%}\
 ${git_info}%{$fg[white]%} 〕
 %{$terminfo[bold]$fg[black]%}》%{$reset_color%}"
 	
