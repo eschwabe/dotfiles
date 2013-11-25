@@ -23,7 +23,7 @@ source $ZSH/oh-my-zsh.sh
 source $HOME/.zsh/simple.zsh-theme
 
 # Load any custom shell configuration
-for config_file ($HOME/.custom/*.sh); do
+for config_file ($HOME/.profile.d/*.sh); do
   source $config_file
 done
 

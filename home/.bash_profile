@@ -26,8 +26,9 @@ VISUAL="$EDITOR"
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
 
 # Load custom shell configurations in ~/.custom
-CUSTOM="${HOME}/.custom/*.sh"
+CUSTOM="${HOME}/.profile.d/*.sh"
 for file in $CUSTOM; do
 	[ -r "$file" ] && source "$file"
 done
+
 unset file
