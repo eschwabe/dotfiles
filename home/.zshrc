@@ -27,13 +27,6 @@ for config_file ($HOME/.profile.d/*.sh); do
   source $config_file
 done
 
-# Customize path
-export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:$PATH
-
-# Set default editor
-export EDITOR="vim"
-export VISUAL="$EDITOR"
-
 # Set vi keybindings
 # bindkey -v
 # bindkey '^r' history-incremental-search-backward

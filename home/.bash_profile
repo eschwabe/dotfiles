@@ -3,7 +3,7 @@
 # Load the shell configuration in ~/.bash_profile.d
 LIB="${HOME}/.bash_profile.d/*.bash"
 for file in $LIB; do
-	[ -r "$file" ] && source "$file"
+  [ -r "$file" ] && source "$file"
 done
 unset file
 
@@ -17,19 +17,12 @@ shopt -s cdspell
 # * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
 # * Recursive globbing, e.g. `echo **/*.txt`
 for option in autocd globstar; do
-	shopt -s "$option" 2> /dev/null
+  shopt -s "$option" 2> /dev/null
 done
-
-# Set default editor
-EDITOR="vim"
-VISUAL="$EDITOR"
-
-# Customize path
-export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
 
 # Load custom shell configurations in ~/.profile.d
 CUSTOM="${HOME}/.profile.d/*.sh"
 for file in $CUSTOM; do
-	[ -r "$file" ] && source "$file"
+  [ -r "$file" ] && source "$file"
 done
 unset file
