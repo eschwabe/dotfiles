@@ -1,4 +1,4 @@
 " System specific GUI options
 
-set guifont=Ubuntu\ Mono\ derivative\ Powerline\ 14
+set guifont=Menlo\ Regular\ for\ Powerline:h14
 

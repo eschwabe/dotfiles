@@ -13,13 +13,13 @@ ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗"
 ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✓"
 
 PROMPT="\
-%{$terminfo[bold]$fg[white]%}〔%{$reset_color%} \
+%{$terminfo[bold]$fg[white]%}[%{$reset_color%} \
 %{$fg[white]%}%* \
 %{$fg[cyan]%}%n \
 %{$fg[black]%}at \
 %{$fg[green]%}%m \
 %{$fg[black]%}in \
 %{$terminfo[bold]$fg[red]%}%~%{$reset_color%}\
-${git_info}%{$fg[white]%} 〕
+${git_info}%{$fg[white]%} ]
 %{$terminfo[bold]$fg[black]%}》%{$reset_color%}"
 	

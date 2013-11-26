@@ -1,3 +1,5 @@
+# Bash shell configuration
+
 # Load the shell configuration in ~/.bash_profile.d
 LIB="${HOME}/.bash_profile.d/*.bash"
 for file in $LIB; do
@@ -25,10 +27,9 @@ VISUAL="$EDITOR"
 # Customize path
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
 
-# Load custom shell configurations in ~/.custom
+# Load custom shell configurations in ~/.profile.d
 CUSTOM="${HOME}/.profile.d/*.sh"
 for file in $CUSTOM; do
 	[ -r "$file" ] && source "$file"
 done
-
 unset file
