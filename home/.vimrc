@@ -47,7 +47,11 @@ set statusline=%t%m%r%h%w\ [%{&ff}\ %Y]\ [%l/%L\ (%p%%)]\ [col=%c\ val=0x%B]
 set tags+=tags,build/tags
 
 " Set default colorscheme
-colorscheme molokai
+try
+    colorscheme Tomorrow-Night
+catch /^Vim\%((\a\+)\)\=:E185/
+    colorscheme molokai
+endtry
 
 " ----------------------------------------------------------------------------
 " UNDO
