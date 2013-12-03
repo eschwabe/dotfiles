@@ -8,9 +8,8 @@ is intended to be used with the homeshick (or homesick) tools to manage
 home directory dotfiles.
 
 ## Installation
-```
-<script src="https://gist.github.com/eschwabe/7654013.js"></script>
-```
+See this gist as an example:
+https://gist.github.com/eschwabe/7654013
 
 ## Customization
 Additional shell (bash or zsh) files may be added to the ~/.profile.d directory. Any
