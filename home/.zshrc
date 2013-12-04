@@ -22,13 +22,10 @@ source $ZSH/oh-my-zsh.sh
 # Load theme
 source $HOME/.zsh/simple.zsh-theme
 
+# Load vi-mode
+source $HOME/.profile.d/vi-mode.zsh
+
 # Load any custom shell configuration
 for config_file ($HOME/.profile.d/*.sh); do
   source $config_file
 done
-
-# Set vi keybindings
-# bindkey -v
-# bindkey '^r' history-incremental-search-backward
-# bindkey '^a' beginning-of-line
-# bindkey '^e' end-of-line
