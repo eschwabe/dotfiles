@@ -1,4 +1,4 @@
-" VIM CONFIGURATION 
+" VIM CONFIGURATION
 "
 " Maintained by Eric Schwabe
 "
