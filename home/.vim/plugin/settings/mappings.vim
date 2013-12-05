@@ -3,6 +3,9 @@
 " set paste toggle
 set pastetoggle=<F3>
 
+" remap esc key
+inoremap jk <ESC>
+
 " edit and update vimrc
 nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>sv :source $MYVIMRC<CR>

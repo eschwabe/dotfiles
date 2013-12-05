@@ -9,19 +9,18 @@ Bundle 'gmarik/vundle'
 Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
 Bundle 'terryma/vim-multiple-cursors'
+Bundle 'tpope/vim-surround'
 Bundle 'bling/vim-airline'
 Bundle 'chriskempson/tomorrow-theme', { 'rtp': 'vim/' }
 
 if version >= 703
   if has("python") || has("python3")
     Bundle 'scrooloose/syntastic'
-    Bundle 'SirVer/ultisnips'
   endif
   if has("lua")
-    Bundle 'Shougo/neocomplete.vim'
+    Bundle 'Shougo/neocomplete'
+    Bundle 'Shougo/neosnippet'
   endif
 endif
 
 filetype plugin indent on
-
-
