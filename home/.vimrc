@@ -111,3 +111,7 @@ set wildignore+=*.o,*.lo,*.obj,*.exe,*.pyc,*.pyo
 set wildignore+=*.bak,*.jpg,*.gif,*.png
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 
+" ----------------------------------------------------------------------------
+" ADDITIONAL SETTINGS
+" ----------------------------------------------------------------------------
+source ~/.vim/settings.vim
