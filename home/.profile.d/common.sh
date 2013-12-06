@@ -32,3 +32,16 @@ export VISUAL="$EDITOR"
 
 # Source homeshick
 source $HOME/.homesick/repos/homeshick/homeshick.sh
+
+# Setup pager
+export PAGER="less"
+export LESS="-x4RFsX"
+
+# Pager source highlighting
+if [ -f "/usr/share/source-highlight/src-hilite-lesspipe.sh" ]; then
+    # ubuntu 12.10: sudo apt-get install source-highlight
+    export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+elif [ -f "/usr/bin/src-hilite-lesspipe.sh" ]; then
+    # fedora 18: sudo yum install source-highlight
+    export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+fi
