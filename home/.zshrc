@@ -23,7 +23,7 @@ source $ZSH/oh-my-zsh.sh
 source $HOME/.zsh/simple.zsh-theme
 
 # Load vi-mode
-source $HOME/.profile.d/vi-mode.zsh
+source $HOME/.zsh/vi-mode.zsh
 
 # Load any custom shell configuration
 for config_file ($HOME/.profile.d/*.sh); do
