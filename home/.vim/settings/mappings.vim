@@ -3,8 +3,8 @@
 " set paste toggle
 set pastetoggle=<F3>
 
-" remap esc key
-inoremap jk <ESC>
+" open plugin windows
+nmap <F2> :NERDTreeToggle<CR>
 
 " edit and update vimrc
 nmap <leader>ev :e $MYVIMRC<CR>
@@ -15,9 +15,6 @@ nmap <leader>wt <ESC>:%s/	/    /g<CR>
 
 " remove trailing whitespace
 nmap <leader>ws <ESC>:%s/\s\+$//e<CR>
-
-" open plugin windows
-nmap <F2> :NERDTreeToggle<CR>
 
 " clear search highlights
 nmap <leader>h :noh<CR>

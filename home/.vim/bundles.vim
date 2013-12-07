@@ -20,6 +20,7 @@ if version >= 703
   if has("lua")
     Bundle 'Shougo/neocomplete'
     Bundle 'Shougo/neosnippet'
+    Bundle 'honza/vim-snippets'
   endif
 endif
 

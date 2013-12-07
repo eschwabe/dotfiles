@@ -11,4 +11,3 @@ if has("gui_running")
   set title                           " show window title
 
 endif
-

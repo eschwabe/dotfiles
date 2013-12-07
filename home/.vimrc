@@ -89,23 +89,10 @@ filetype plugin indent on       " Load filetype and indent plugins
 set list listchars=tab:\ \ ,trail:·
 
 " ----------------------------------------------------------------------------
-" FOLDING
-" ----------------------------------------------------------------------------
-if has("folding")
-  set foldenable                " Enable folding
-  set foldmethod=marker         " Fold using markers
-  set foldlevel=100             " No folding by default
-
-  " Commands that trigger auto-unfold
-  set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
-endif
-
-" ----------------------------------------------------------------------------
-" COMPLETION
+" COMMAND-LINE COMPLETION
 " ----------------------------------------------------------------------------
 set wildmenu                    " Enable command line completion enhanced mode
-set wildmode=list:longest       " Use large list for command line completion
-set completeopt=menu,longest    " Complete with longest match, show menu
+set wildmode=full               " Complete the next full match
 
 set wildignore+=*.o,*.lo,*.obj,*.exe,*.pyc,*.pyo
 set wildignore+=*.bak,*.jpg,*.gif,*.png
