@@ -1,10 +1,17 @@
 " Keyboard Mappings
 
 " set paste toggle
-set pastetoggle=<F3>
+set pastetoggle=<F4>
 
 " open plugin windows
 nmap <F2> :NERDTreeToggle<CR>
+
+" open tarbar plugin
+nnoremap <silent> <F3> :TagbarToggle<CR>
+
+" switch buffers
+nmap <C-Tab> :bn<CR>
+nmap <C-S-Tab> :bp<CR>
 
 " edit and update vimrc
 nmap <leader>ev :e $MYVIMRC<CR>
@@ -21,7 +28,7 @@ nmap <leader>h :noh<CR>
 
 " make commands
 nmap <leader>m :make! -C build<CR>
-nmap <leader>d :make! -C build ctags cscope<CR>
+nmap <leader>mc :make! -C build ctags cscope<CR>
 
 " viewport control (left, down, up, right)
 nmap <leader>h <C-w>h
@@ -33,10 +40,10 @@ nmap <leader>l <C-w>l
 nmap <leader>tn <C-T>
 nmap <leader>tp <C-]>
 
-" switch buffers
-nmap <C-Tab> :bn<CR>
-nmap <C-S-Tab> :bp<CR>
-
 " ctrlp mappings
 nmap <leader>f :CtrlP<CR>
 nmap <leader>b :CtrlPBuffer<CR>
+
+" insert timestamp
+nmap <leader>i a<C-R>=strftime("%Y-%m-%d %I:%M:%S")<CR><Esc>
+imap <leader>i <C-R>=strftime("%Y-%m-%d %I:%M:%S")<CR>

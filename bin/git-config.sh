@@ -17,9 +17,14 @@ git config --global pager.status false
 git config --global pager.show-branch true
 
 # shortcut aliases
-git config --global alias.st status
+git config --global alias.br branch
 git config --global alias.ci commit
+git config --global alias.cl clone
 git config --global alias.co checkout
+git config --global alias.lt 'describe --tags --abbrev=0'
+git config --global alias.st 'status -s'
+git config --global alias.ls 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate'
+git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --numstat'
 
 # another feature that will be available in 1.5.4 onwards
 # this is useful when you use topic branches for grouping together logically related changes
