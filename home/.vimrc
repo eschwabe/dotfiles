@@ -33,8 +33,8 @@ set noswapfile          " Disable swap files
 set history=1000        " Store lots of command history
 set cursorline          " Highlight current line for visability
 
-" Highlight past column 81
-let &colorcolumn=join(range(81,256),",")
+" Highlight text past column 81
+match CursorLine /\%81v.\+/
 
 " Set default status line
 set statusline=%t%m%r%h%w\ [%{&ff}\ %Y]\ [%l/%L\ (%p%%)]\ [col=%c\ val=0x%B]

@@ -4,6 +4,7 @@ if has("gui_running")
 
   set guitablabel=%t\ %m%r            " tab label
   set guioptions-=m                   " remove menu bar
+  set guioptions-=T                   " remove toolbar
   set guioptions-=l                   " remove left-hand scrollbar
   set guioptions-=L                   " remove left-hand scrollbar
   set guioptions-=r                   " remove right-hand scrollbar
