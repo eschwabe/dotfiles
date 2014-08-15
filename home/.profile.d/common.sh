@@ -17,12 +17,13 @@ pathmunge () {
 }
 
 # Customize path
+PATH="/usr/bin"
+pathmunge /usr/local/bin
 pathmunge /bin
 pathmunge /usr/bin
 pathmunge /usr/sbin
 pathmunge /sbin
 pathmunge /usr/X11/bin
-pathmunge /usr/local/bin
 pathmunge /opt/local/bin
 pathmunge /opt/local/sbin
 

@@ -7,7 +7,7 @@ call vundle#rc()
 
 Bundle 'bling/vim-airline'
 Bundle 'gmarik/vundle'
-Bundle 'jiangmiao/auto-pairs'
+Bundle 'Raimondi/delimitMate'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'mattn/emmet-vim'
