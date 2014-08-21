@@ -1,7 +1,7 @@
 # Common shell configuration (bash and zsh)
 
 # Display path
-function path(){
+function path() {
     echo $PATH | tr ':' '\n'
 }
 
@@ -17,7 +17,6 @@ pathmunge () {
 }
 
 # Customize path
-PATH="/usr/bin"
 pathmunge /usr/local/bin
 pathmunge /bin
 pathmunge /usr/bin
@@ -26,6 +25,8 @@ pathmunge /sbin
 pathmunge /usr/X11/bin
 pathmunge /opt/local/bin
 pathmunge /opt/local/sbin
+
+unset -f pathmunge
 
 # Set default editor
 export EDITOR="vim"
