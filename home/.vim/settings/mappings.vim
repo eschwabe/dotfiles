@@ -6,7 +6,7 @@ set pastetoggle=<F4>
 " open plugin windows
 nmap <F2> :NERDTreeToggle<CR>
 
-" open tarbar plugin
+" open tagbar plugin
 nnoremap <silent> <F3> :TagbarToggle<CR>
 
 " switch buffers

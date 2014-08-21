@@ -74,6 +74,8 @@ set softtabstop=4               " When hitting <BS> remove spaces as if tab
 set copyindent                  " Copy previous indentation on auto indent
 set list                        " Display tabs and trailing spaces
 
+set listchars=trail:·,precedes:«,extends:»,tab:▸\
+
 " ----------------------------------------------------------------------------
 " COMMAND-LINE COMPLETION
 " ----------------------------------------------------------------------------

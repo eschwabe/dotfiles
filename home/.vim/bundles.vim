@@ -5,29 +5,27 @@ filetype off
 set runtimepath+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-Bundle 'Raimondi/delimitMate'
-Bundle 'bling/vim-airline'
-Bundle 'gmarik/vundle'
-Bundle 'kien/ctrlp.vim'
-Bundle 'majutsushi/tagbar'
-Bundle 'mattn/emmet-vim'
-Bundle 'scrooloose/nerdtree'
-Bundle 'terryma/vim-multiple-cursors'
-Bundle 'tpope/vim-commentary'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-sensible'
-Bundle 'tpope/vim-surround'
+Plugin 'Raimondi/delimitMate'
+Plugin 'bling/vim-airline'
+Plugin 'gmarik/vundle'
+Plugin 'kien/ctrlp.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'mattn/emmet-vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-surround'
 
-Bundle 'chriskempson/tomorrow-theme', { 'rtp': 'vim/' }
+Plugin 'chriskempson/tomorrow-theme', { 'rtp': 'vim/' }
 
 if version >= 703
   if has("python") || has("python3")
-    Bundle 'scrooloose/syntastic'
-  endif
-  if has("lua")
-    Bundle 'Shougo/neocomplete'
-    Bundle 'Shougo/neosnippet'
-    Bundle 'honza/vim-snippets'
+    Plugin 'SirVer/ultisnips'
+    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'honza/vim-snippets'
+    Plugin 'scrooloose/syntastic'
   endif
 endif
 
