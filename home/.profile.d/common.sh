@@ -32,9 +32,6 @@ unset -f pathmunge
 export EDITOR="vim"
 export VISUAL="$EDITOR"
 
-# Source homeshick
-source $HOME/.homesick/repos/homeshick/homeshick.sh
-
 # Setup pager
 export PAGER="less"
 export LESS="-x4RFsX"

@@ -2,7 +2,7 @@
 
 filetype off
 
-set runtimepath+=~/.vim/bundle/vundle/
+set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#rc()
 
 Plugin 'Raimondi/delimitMate'

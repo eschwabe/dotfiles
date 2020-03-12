@@ -17,6 +17,7 @@ fi
 alias c='clear'
 alias k='clear'
 alias cls='clear'
+alias grep='grep --color=auto'
 
 alias edit="$EDITOR"
 alias pager="$PAGER"
