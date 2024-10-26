@@ -16,16 +16,18 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 plugins=(cp git vundle)
 
-# Load oh-my-zsh
-source $ZSH/oh-my-zsh.sh
-
 # Load theme
-source $HOME/.zsh/simple.zsh-theme
+#source $HOME/.zsh/simple.zsh-theme
 
 # Load vi-mode
 source $HOME/.zsh/vi-mode.zsh
 
+# Load starship if available
+if starship init zsh &> /dev/null; then
+  eval "$(starship init zsh)"
+fi
+
 # Load any custom shell configuration
-for config_file ($HOME/.profile.d/*.sh); do
+for config_file ($HOME/.profile.d/*.(zsh|sh)); do
   source $config_file
 done
