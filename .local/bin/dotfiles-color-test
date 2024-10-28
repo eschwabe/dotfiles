@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 echo -e "\033[0mCOLOR_NC (No color)"
 echo -e "\033[1;37mCOLOR_WHITE"
