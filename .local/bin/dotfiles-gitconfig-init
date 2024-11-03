@@ -23,11 +23,11 @@ git config --global alias.br branch
 git config --global alias.ci commit
 git config --global alias.cl clone
 git config --global alias.co checkout
-git config --global alias.lt 'describe --tags --abbrev=0'
 git config --global alias.st 'status -s'
 git config --global alias.ls 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate'
 git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --numstat'
 git config --global alias.lds 'log --pretty=format:"%C(yellow)%h\ %ad%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --date=short'
+git config --global alias.lt 'describe --tags --abbrev=0'
 git config --global alias.sl 'stash list' 
 git config --global alias.sa 'stash apply'
 git config --global alias.ss 'stash save' 
