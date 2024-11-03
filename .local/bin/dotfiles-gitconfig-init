@@ -28,6 +28,9 @@ git config --global alias.st 'status -s'
 git config --global alias.ls 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate'
 git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --numstat'
 git config --global alias.lds 'log --pretty=format:"%C(yellow)%h\ %ad%Cred%d\ %Creset%s%Cblue\ [%cn]" --decorate --date=short'
+git config --global alias.sl 'stash list' 
+git config --global alias.sa 'stash apply'
+git config --global alias.ss 'stash save' 
 
 # another feature that will be available in 1.5.4 onwards
 # this is useful when you use topic branches for grouping together logically related changes
