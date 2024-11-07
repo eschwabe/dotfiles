@@ -1,5 +1,3 @@
-[include]
-	path = ~/.gitconfig.user
 [log]
 	decorate = short
 [color]
@@ -34,3 +32,22 @@
 	helper = /usr/local/share/gcm-core/git-credential-manager
 [credential "https://dev.azure.com"]
 	useHttpPath = true
+[push]
+	default = matching
+[core]
+	ignorecase = false
+	legacyheaders = false
+	editor = code --wait --new-window
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+	tool = vscode
+[mergetool "vscode"]
+	cmd = code --wait $MERGED
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
