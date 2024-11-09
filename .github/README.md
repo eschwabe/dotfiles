@@ -1,8 +1,8 @@
 # Dotfiles
 
 ## Overview
-Personal dotfile configurations for MacOS and Linux. The repository is setup to be installed in your $HOME directory. The dotfiles
-include configuration for zsh, vim, fonts, git, and other tools. The dotfiles are installed and managed with git.
+Dotfile configurations for MacOS and Linux. The repository is setup to be installed in your $HOME directory. The dotfiles
+include configuration for zsh, fish, vim, fonts, git, and other tools. The dotfiles are installed and managed with git.
 
 ## Installation
 Dotfiles are installed using git commands. See this tutorial for details https://www.atlassian.com/git/tutorials/dotfiles.
