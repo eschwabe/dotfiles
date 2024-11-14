@@ -1,4 +1,4 @@
-# Common shell configuration (bash and zsh)
+# Common shell configuration
 
 # Display path
 function path() {
