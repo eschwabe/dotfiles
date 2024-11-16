@@ -1,0 +1,4 @@
+FILE=/$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -f "$FILE" ]; then
+  source "$FILE"
+fi

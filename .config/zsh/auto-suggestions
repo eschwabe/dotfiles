@@ -1,0 +1,4 @@
+FILE=/$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [ -f "$FILE" ]; then
+  source "$FILE"
+fi

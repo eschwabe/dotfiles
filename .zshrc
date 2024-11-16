@@ -88,6 +88,8 @@ if starship init zsh &> /dev/null; then
 fi
 
 # Load any custom shell configuration
-for config_file ($HOME/.config/zsh/*); do
-  source "${config_file}"
-done
+if [ "$(ls -A $HOME/.config/zsh/)" ]; then
+  for config_file ($HOME/.config/zsh/*); do
+    source "${config_file}"
+  done
+fi
