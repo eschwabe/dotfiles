@@ -1,0 +1,6 @@
+FILE=/$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+if [ -f "$FILE" ]; then
+  source "$FILE"
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down 
+fi

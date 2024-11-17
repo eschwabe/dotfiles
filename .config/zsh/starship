@@ -1,0 +1,4 @@
+# Load starship if available
+if starship init zsh &> /dev/null; then
+  eval "$(starship init zsh)"
+fi
