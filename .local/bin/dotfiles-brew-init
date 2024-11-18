@@ -27,6 +27,7 @@ brew install curl
 # Install zsh plugins
 brew install zsh-syntax-highlighting
 brew install zsh-autosuggestions
+brew install starship
 
 # Install GnuPG to enable PGP-signing commits.
 brew install gnupg
