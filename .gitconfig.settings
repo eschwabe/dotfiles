@@ -35,13 +35,20 @@
 [pull]
 	ff = only
 [push]
-	default = matching
+	default = simple
+	autoSetupRemote = true
+	followTags = true
 [core]
 	ignorecase = false
 	legacyheaders = false
 	editor = code --wait --new-window
+	excludesfile = ~/.gitignore
 [diff]
 	tool = vscode
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
 [difftool "vscode"]
 	cmd = code --wait --diff $LOCAL $REMOTE
 [merge]
@@ -53,3 +60,26 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[init]
+	defaultBranch = main
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[help]
+	autocorrect = prompt
+[commit]
+	verbose = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
