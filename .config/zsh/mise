@@ -1,0 +1,4 @@
+MISE_BIN=/$(brew --prefix)/bin/mise
+if [ -f "$MISE_BIN" ]; then
+  eval "$($MISE_BIN activate zsh)"
+fi
