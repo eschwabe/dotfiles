@@ -1,0 +1,16 @@
+# Function to safely add to PATH if directory exists and not already present
+add_to_path() {
+    local dir="$1"
+    if [[ -d "$dir" && ":$PATH:" != *":$dir:"* ]]; then
+        export PATH="$dir:$PATH"
+    fi
+}
+
+# Add Homebrew-managed paths if they exist and aren't already in PATH
+add_to_path "$HOMEBREW_PREFIX/opt/libpq/bin"
+add_to_path "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin"
+add_to_path "$HOMEBREW_PREFIX/opt/findutils/libexec/gnubin"
+add_to_path "$HOMEBREW_PREFIX/opt/make/libexec/gnubin"
+add_to_path "$HOMEBREW_PREFIX/opt/grep/libexec/gnubin"
+add_to_path "$HOMEBREW_PREFIX/opt/gawk/libexec/gnubin"
+add_to_path "$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin"
