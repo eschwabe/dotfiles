@@ -176,7 +176,7 @@ process_image() {
     
     if [[ -z "$date" ]]; then
         log_warn "Could not determine date for: $file"
-        ((SKIPPED++))
+        ((SKIPPED++)) || true
         return
     fi
     
@@ -214,18 +214,18 @@ process_image() {
         if $MOVE_FILES; then
             if mv "$file" "$dest_path"; then
                 log_info "Moved: $file -> $dest_path"
-                ((PROCESSED++))
+                ((PROCESSED++)) || true
             else
                 log_error "Failed to move: $file"
-                ((ERRORS++))
+                ((ERRORS++)) || true
             fi
         else
             if cp "$file" "$dest_path"; then
                 log_info "Copied: $file -> $dest_path"
-                ((PROCESSED++))
+                ((PROCESSED++)) || true
             else
                 log_error "Failed to copy: $file"
-                ((ERRORS++))
+                ((ERRORS++)) || true
             fi
         fi
     fi
