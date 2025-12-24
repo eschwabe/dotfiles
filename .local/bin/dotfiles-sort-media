@@ -221,7 +221,7 @@ process_media() {
         
         # Copy or move the file
         if $MOVE_FILES; then
-            if mv "$file" "$dest_path"; then
+            if mv -n "$file" "$dest_path"; then
                 log_info "Moved: $file -> $dest_path"
                 ((PROCESSED++)) || true
             else
@@ -229,7 +229,7 @@ process_media() {
                 ((ERRORS++)) || true
             fi
         else
-            if cp "$file" "$dest_path"; then
+            if cp -n "$file" "$dest_path"; then
                 log_info "Copied: $file -> $dest_path"
                 ((PROCESSED++)) || true
             else
