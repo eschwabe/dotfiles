@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Sort pictures into directories based on date taken metadata
-# Usage: dotfiles-pictures-sort [OPTIONS] <input-dir> <output-dir>
+# Sort pictures and videos into directories based on date taken metadata
+# Usage: dotfiles-sort-pics [OPTIONS] <input-dir> <output-dir>
 
 set -euo pipefail
 
@@ -13,10 +13,14 @@ PROCESSED=0
 SKIPPED=0
 ERRORS=0
 
-# Image extensions to process
-IMAGE_EXTENSIONS=(
+# Media extensions to process (images and videos)
+MEDIA_EXTENSIONS=(
+    # Images
     "jpg" "jpeg" "png" "heic" "gif" "tiff" "tif"
     "bmp" "webp" "raw" "cr2" "nef" "arw" "dng"
+    # Videos
+    "mov" "mp4" "avi" "mkv" "m4v" "wmv" "flv"
+    "webm" "3gp" "mts" "m2ts"
 )
 
 # Month name lookup (using string keys to avoid octal interpretation)
@@ -42,7 +46,7 @@ usage() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] <input-dir> <output-dir>
 
-Sort pictures into directories based on date taken metadata.
+Sort pictures and videos into directories based on date taken metadata.
 Output structure: <year>/<month>-<Mon>/<YYYY-MM-DD>/
 
 Options:
@@ -70,18 +74,23 @@ log_error() {
     echo "[ERROR] $*" >&2
 }
 
-# Get the date from image metadata or fall back to file creation time
+# Get the date from media metadata or fall back to file creation time
 # Returns date in YYYY-MM-DD format
-get_image_date() {
+get_media_date() {
     local file="$1"
     local date=""
 
-    # Try DateTimeOriginal first (when photo was taken)
+    # Try DateTimeOriginal first (when photo/video was taken)
     date=$(exiftool -s3 -d "%Y-%m-%d" -DateTimeOriginal "$file" 2>/dev/null | head -1)
     
     if [[ -z "$date" ]]; then
         # Try CreateDate (camera's date)
         date=$(exiftool -s3 -d "%Y-%m-%d" -CreateDate "$file" 2>/dev/null | head -1)
+    fi
+    
+    if [[ -z "$date" ]]; then
+        # Try MediaCreateDate (common in video files)
+        date=$(exiftool -s3 -d "%Y-%m-%d" -MediaCreateDate "$file" 2>/dev/null | head -1)
     fi
     
     if [[ -z "$date" ]]; then
@@ -145,12 +154,12 @@ build_dest_path() {
     echo "$output_dir/$year/$month-$month_name/$date"
 }
 
-# Build find command arguments for image extensions
+# Build find command arguments for media extensions
 build_find_args() {
     local args=()
     local first=true
     
-    for ext in "${IMAGE_EXTENSIONS[@]}"; do
+    for ext in "${MEDIA_EXTENSIONS[@]}"; do
         if $first; then
             args+=("(" "-iname" "*.$ext")
             first=false
@@ -163,8 +172,8 @@ build_find_args() {
     echo "${args[@]}"
 }
 
-# Process a single image file
-process_image() {
+# Process a single media file
+process_media() {
     local file="$1"
     local output_dir="$2"
     local filename
@@ -172,7 +181,7 @@ process_image() {
     
     # Get date from metadata
     local date
-    date=$(get_image_date "$file")
+    date=$(get_media_date "$file")
     
     if [[ -z "$date" ]]; then
         log_warn "Could not determine date for: $file"
@@ -306,7 +315,7 @@ main() {
     
     # Print configuration
     echo "============================================"
-    echo "Picture Sorting Script"
+    echo "Media Sorting Script"
     echo "============================================"
     echo "Input directory:  $input_dir"
     echo "Output directory: $output_dir"
@@ -317,14 +326,14 @@ main() {
     echo "============================================"
     echo ""
     
-    # Find and process images
+    # Find and process media files
     # Build the find command dynamically
     local find_cmd="find \"$input_dir\" -type f ! -name \".*\""
     
     # Add extension filters
     local ext_filter="\\( "
     local first=true
-    for ext in "${IMAGE_EXTENSIONS[@]}"; do
+    for ext in "${MEDIA_EXTENSIONS[@]}"; do
         if $first; then
             ext_filter+="-iname \"*.$ext\""
             first=false
@@ -338,7 +347,7 @@ main() {
     
     # Process each file
     while IFS= read -r file; do
-        process_image "$file" "$output_dir"
+        process_media "$file" "$output_dir"
     done < <(eval "$find_cmd" 2>/dev/null || true)
     
     # Print summary
