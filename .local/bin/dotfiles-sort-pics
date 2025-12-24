@@ -5,7 +5,7 @@
 set -euo pipefail
 
 # Configuration
-MOVE_FILES=false
+MOVE_FILES=true
 DRY_RUN=false
 
 # Counters
@@ -46,14 +46,14 @@ Sort pictures into directories based on date taken metadata.
 Output structure: <year>/<month>-<Mon>/<YYYY-MM-DD>/
 
 Options:
-  --move      Move files instead of copying (default: copy)
+  --copy      Copy files instead of moving (default: move)
   --dry-run   Show what would be done without making changes
   --help      Show this help message
 
 Examples:
   $(basename "$0") ~/Pictures/Unsorted ~/Pictures/Sorted
   $(basename "$0") --dry-run ~/Downloads ~/Pictures
-  $(basename "$0") --move /Volumes/Camera ~/Pictures
+  $(basename "$0") --copy /Volumes/Camera ~/Pictures
 EOF
     exit 0
 }
@@ -239,8 +239,8 @@ main() {
     # Parse arguments
     while [[ $# -gt 0 ]]; do
         case "$1" in
-            --move)
-                MOVE_FILES=true
+            --copy)
+                MOVE_FILES=false
                 shift
                 ;;
             --dry-run)
