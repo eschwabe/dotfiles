@@ -1,0 +1,360 @@
+#!/usr/bin/env bash
+# Sort pictures into directories based on date taken metadata
+# Usage: dotfiles-pictures-sort [OPTIONS] <input-dir> <output-dir>
+
+set -euo pipefail
+
+# Configuration
+MOVE_FILES=false
+DRY_RUN=false
+
+# Counters
+PROCESSED=0
+SKIPPED=0
+ERRORS=0
+
+# Image extensions to process
+IMAGE_EXTENSIONS=(
+    "jpg" "jpeg" "png" "heic" "gif" "tiff" "tif"
+    "bmp" "webp" "raw" "cr2" "nef" "arw" "dng"
+)
+
+# Month name lookup (using string keys to avoid octal interpretation)
+get_month_name() {
+    case "$1" in
+        01) echo "Jan" ;;
+        02) echo "Feb" ;;
+        03) echo "Mar" ;;
+        04) echo "Apr" ;;
+        05) echo "May" ;;
+        06) echo "Jun" ;;
+        07) echo "Jul" ;;
+        08) echo "Aug" ;;
+        09) echo "Sep" ;;
+        10) echo "Oct" ;;
+        11) echo "Nov" ;;
+        12) echo "Dec" ;;
+        *)  echo "Unknown" ;;
+    esac
+}
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [OPTIONS] <input-dir> <output-dir>
+
+Sort pictures into directories based on date taken metadata.
+Output structure: <year>/<month>-<Mon>/<YYYY-MM-DD>/
+
+Options:
+  --move      Move files instead of copying (default: copy)
+  --dry-run   Show what would be done without making changes
+  --help      Show this help message
+
+Examples:
+  $(basename "$0") ~/Pictures/Unsorted ~/Pictures/Sorted
+  $(basename "$0") --dry-run ~/Downloads ~/Pictures
+  $(basename "$0") --move /Volumes/Camera ~/Pictures
+EOF
+    exit 0
+}
+
+log_info() {
+    echo "[INFO] $*"
+}
+
+log_warn() {
+    echo "[WARN] $*" >&2
+}
+
+log_error() {
+    echo "[ERROR] $*" >&2
+}
+
+# Get the date from image metadata or fall back to file creation time
+# Returns date in YYYY-MM-DD format
+get_image_date() {
+    local file="$1"
+    local date=""
+
+    # Try DateTimeOriginal first (when photo was taken)
+    date=$(exiftool -s3 -d "%Y-%m-%d" -DateTimeOriginal "$file" 2>/dev/null | head -1)
+    
+    if [[ -z "$date" ]]; then
+        # Try CreateDate (camera's date)
+        date=$(exiftool -s3 -d "%Y-%m-%d" -CreateDate "$file" 2>/dev/null | head -1)
+    fi
+    
+    if [[ -z "$date" ]]; then
+        # Try ModifyDate
+        date=$(exiftool -s3 -d "%Y-%m-%d" -ModifyDate "$file" 2>/dev/null | head -1)
+    fi
+    
+    if [[ -z "$date" ]]; then
+        # Fall back to file birth time (macOS)
+        date=$(stat -f "%SB" -t "%Y-%m-%d" "$file" 2>/dev/null)
+    fi
+    
+    if [[ -z "$date" ]]; then
+        # Last resort: file modification time
+        date=$(stat -f "%Sm" -t "%Y-%m-%d" "$file" 2>/dev/null)
+    fi
+    
+    echo "$date"
+}
+
+# Get a unique filename if destination already exists
+# Appends _1, _2, etc. before the extension
+get_unique_filename() {
+    local dest_dir="$1"
+    local filename="$2"
+    
+    local base="${filename%.*}"
+    local ext="${filename##*.}"
+    local dest_path="$dest_dir/$filename"
+    local counter=1
+    
+    # If no extension, handle it
+    if [[ "$base" == "$ext" ]]; then
+        ext=""
+    fi
+    
+    while [[ -e "$dest_path" ]]; do
+        if [[ -n "$ext" ]]; then
+            dest_path="$dest_dir/${base}_${counter}.${ext}"
+        else
+            dest_path="$dest_dir/${base}_${counter}"
+        fi
+        ((counter++))
+    done
+    
+    echo "$dest_path"
+}
+
+# Build the destination directory path from a date
+# Input: YYYY-MM-DD
+# Output: <output-dir>/YYYY/MM-Mon/YYYY-MM-DD
+build_dest_path() {
+    local output_dir="$1"
+    local date="$2"
+    
+    local year="${date:0:4}"
+    local month="${date:5:2}"
+    local month_name
+    month_name=$(get_month_name "$month")
+    
+    echo "$output_dir/$year/$month-$month_name/$date"
+}
+
+# Build find command arguments for image extensions
+build_find_args() {
+    local args=()
+    local first=true
+    
+    for ext in "${IMAGE_EXTENSIONS[@]}"; do
+        if $first; then
+            args+=("(" "-iname" "*.$ext")
+            first=false
+        else
+            args+=("-o" "-iname" "*.$ext")
+        fi
+    done
+    args+=(")")
+    
+    echo "${args[@]}"
+}
+
+# Process a single image file
+process_image() {
+    local file="$1"
+    local output_dir="$2"
+    local filename
+    filename=$(basename "$file")
+    
+    # Get date from metadata
+    local date
+    date=$(get_image_date "$file")
+    
+    if [[ -z "$date" ]]; then
+        log_warn "Could not determine date for: $file"
+        ((SKIPPED++))
+        return
+    fi
+    
+    # Build destination path
+    local dest_dir
+    dest_dir=$(build_dest_path "$output_dir" "$date")
+    
+    # Get unique filename if needed
+    local dest_path
+    if $DRY_RUN; then
+        # In dry-run, just show what would happen
+        dest_path="$dest_dir/$filename"
+        if [[ -e "$dest_path" ]]; then
+            dest_path="$dest_dir/${filename%.*}_N.${filename##*.}"
+        fi
+    else
+        dest_path=$(get_unique_filename "$dest_dir" "$filename")
+    fi
+    
+    # Perform the operation
+    local action
+    if $MOVE_FILES; then
+        action="Move"
+    else
+        action="Copy"
+    fi
+    
+    if $DRY_RUN; then
+        log_info "[DRY-RUN] $action: $file -> $dest_path"
+    else
+        # Create destination directory
+        mkdir -p "$dest_dir"
+        
+        # Copy or move the file
+        if $MOVE_FILES; then
+            if mv "$file" "$dest_path"; then
+                log_info "Moved: $file -> $dest_path"
+                ((PROCESSED++))
+            else
+                log_error "Failed to move: $file"
+                ((ERRORS++))
+            fi
+        else
+            if cp "$file" "$dest_path"; then
+                log_info "Copied: $file -> $dest_path"
+                ((PROCESSED++))
+            else
+                log_error "Failed to copy: $file"
+                ((ERRORS++))
+            fi
+        fi
+    fi
+}
+
+# Main function
+main() {
+    local input_dir=""
+    local output_dir=""
+    
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --move)
+                MOVE_FILES=true
+                shift
+                ;;
+            --dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            --help|-h)
+                usage
+                ;;
+            -*)
+                log_error "Unknown option: $1"
+                echo "Use --help for usage information."
+                exit 1
+                ;;
+            *)
+                if [[ -z "$input_dir" ]]; then
+                    input_dir="$1"
+                elif [[ -z "$output_dir" ]]; then
+                    output_dir="$1"
+                else
+                    log_error "Too many arguments"
+                    echo "Use --help for usage information."
+                    exit 1
+                fi
+                shift
+                ;;
+        esac
+    done
+    
+    # Validate arguments
+    if [[ -z "$input_dir" ]] || [[ -z "$output_dir" ]]; then
+        log_error "Both input and output directories are required"
+        echo "Use --help for usage information."
+        exit 1
+    fi
+    
+    # Resolve to absolute paths
+    input_dir=$(cd "$input_dir" 2>/dev/null && pwd)
+    if [[ -z "$input_dir" ]]; then
+        log_error "Input directory does not exist: $1"
+        exit 1
+    fi
+    
+    # Check input directory exists
+    if [[ ! -d "$input_dir" ]]; then
+        log_error "Input directory does not exist: $input_dir"
+        exit 1
+    fi
+    
+    # Create output directory if needed (unless dry-run)
+    if ! $DRY_RUN; then
+        mkdir -p "$output_dir"
+    fi
+    output_dir=$(cd "$output_dir" 2>/dev/null && pwd) || output_dir="$output_dir"
+    
+    # Check exiftool is available
+    if ! command -v exiftool &>/dev/null; then
+        log_error "exiftool is not installed. Please install it first."
+        echo "  macOS: brew install exiftool"
+        echo "  Ubuntu: sudo apt install libimage-exiftool-perl"
+        exit 1
+    fi
+    
+    # Print configuration
+    echo "============================================"
+    echo "Picture Sorting Script"
+    echo "============================================"
+    echo "Input directory:  $input_dir"
+    echo "Output directory: $output_dir"
+    echo "Mode:             $(if $MOVE_FILES; then echo 'Move'; else echo 'Copy'; fi)"
+    if $DRY_RUN; then
+        echo "*** DRY RUN - No changes will be made ***"
+    fi
+    echo "============================================"
+    echo ""
+    
+    # Find and process images
+    # Build the find command dynamically
+    local find_cmd="find \"$input_dir\" -type f ! -name \".*\""
+    
+    # Add extension filters
+    local ext_filter="\\( "
+    local first=true
+    for ext in "${IMAGE_EXTENSIONS[@]}"; do
+        if $first; then
+            ext_filter+="-iname \"*.$ext\""
+            first=false
+        else
+            ext_filter+=" -o -iname \"*.$ext\""
+        fi
+    done
+    ext_filter+=" \\)"
+    
+    find_cmd+=" $ext_filter"
+    
+    # Process each file
+    while IFS= read -r file; do
+        process_image "$file" "$output_dir"
+    done < <(eval "$find_cmd" 2>/dev/null || true)
+    
+    # Print summary
+    echo ""
+    echo "============================================"
+    echo "Summary"
+    echo "============================================"
+    if $DRY_RUN; then
+        echo "Files that would be processed: $((PROCESSED + SKIPPED + ERRORS))"
+    else
+        echo "Files processed: $PROCESSED"
+    fi
+    echo "Files skipped (no date): $SKIPPED"
+    echo "Errors: $ERRORS"
+    echo "============================================"
+}
+
+# Run main function
+main "$@"
