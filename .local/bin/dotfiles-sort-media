@@ -241,7 +241,7 @@ process_media() {
     
     # Handle duplicate
     if $is_duplicate; then
-        log_info "Skipped (duplicate): $file"
+        log_info "Skipped (duplicate): $file -> $dest_path"
         ((DUPLICATES++)) || true
         return
     fi
