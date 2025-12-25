@@ -11,6 +11,7 @@ DRY_RUN=false
 # Counters
 PROCESSED=0
 SKIPPED=0
+DUPLICATES=0
 ERRORS=0
 
 # Media extensions to process (images and videos)
@@ -111,6 +112,33 @@ get_media_date() {
     echo "$date"
 }
 
+# Check if two files are identical (same size and content)
+# Returns 0 if identical, 1 if different
+files_are_identical() {
+    local file1="$1"
+    local file2="$2"
+    
+    # First check: compare file sizes (fast)
+    local size1 size2
+    size1=$(stat -f "%z" "$file1" 2>/dev/null)
+    size2=$(stat -f "%z" "$file2" 2>/dev/null)
+    
+    if [[ "$size1" != "$size2" ]]; then
+        return 1  # Different sizes, not identical
+    fi
+    
+    # Second check: compare MD5 hashes (slower but definitive)
+    local hash1 hash2
+    hash1=$(md5 -q "$file1" 2>/dev/null)
+    hash2=$(md5 -q "$file2" 2>/dev/null)
+    
+    if [[ "$hash1" == "$hash2" ]]; then
+        return 0  # Identical
+    else
+        return 1  # Different
+    fi
+}
+
 # Get a unique filename if destination already exists
 # Appends _1, _2, etc. before the extension
 get_unique_filename() {
@@ -193,16 +221,29 @@ process_media() {
     local dest_dir
     dest_dir=$(build_dest_path "$output_dir" "$date")
     
-    # Get unique filename if needed
-    local dest_path
-    if $DRY_RUN; then
-        # In dry-run, just show what would happen
-        dest_path="$dest_dir/$filename"
-        if [[ -e "$dest_path" ]]; then
-            dest_path="$dest_dir/${filename%.*}_N.${filename##*.}"
+    # Check for duplicates and get unique filename if needed
+    local dest_path="$dest_dir/$filename"
+    local is_duplicate=false
+    
+    if [[ -e "$dest_path" ]]; then
+        # File with same name exists - check if it's a duplicate
+        if files_are_identical "$file" "$dest_path"; then
+            is_duplicate=true
+        else
+            # Not a duplicate, find unique filename
+            if ! $DRY_RUN; then
+                dest_path=$(get_unique_filename "$dest_dir" "$filename")
+            else
+                dest_path="$dest_dir/${filename%.*}_N.${filename##*.}"
+            fi
         fi
-    else
-        dest_path=$(get_unique_filename "$dest_dir" "$filename")
+    fi
+    
+    # Handle duplicate
+    if $is_duplicate; then
+        log_info "Skipped (duplicate): $file"
+        ((DUPLICATES++)) || true
+        return
     fi
     
     # Perform the operation
@@ -356,10 +397,11 @@ main() {
     echo "Summary"
     echo "============================================"
     if $DRY_RUN; then
-        echo "Files that would be processed: $((PROCESSED + SKIPPED + ERRORS))"
+        echo "Files that would be processed: $((PROCESSED + SKIPPED + DUPLICATES + ERRORS))"
     else
         echo "Files processed: $PROCESSED"
     fi
+    echo "Files skipped (duplicates): $DUPLICATES"
     echo "Files skipped (no date): $SKIPPED"
     echo "Errors: $ERRORS"
     echo "============================================"
