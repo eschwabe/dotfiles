@@ -100,13 +100,23 @@ get_media_date() {
     fi
     
     if [[ -z "$date" ]]; then
-        # Fall back to file birth time (macOS)
-        date=$(stat -f "%SB" -t "%Y-%m-%d" "$file" 2>/dev/null)
-    fi
-    
-    if [[ -z "$date" ]]; then
-        # Last resort: file modification time
-        date=$(stat -f "%Sm" -t "%Y-%m-%d" "$file" 2>/dev/null)
+        # Fall back to earlier of file birth time or modification time (macOS)
+        local birth_date mod_date
+        birth_date=$(stat -f "%SB" -t "%Y-%m-%d" "$file" 2>/dev/null)
+        mod_date=$(stat -f "%Sm" -t "%Y-%m-%d" "$file" 2>/dev/null)
+        
+        if [[ -n "$birth_date" && -n "$mod_date" ]]; then
+            # Compare dates and use the earlier one
+            if [[ "$birth_date" < "$mod_date" ]]; then
+                date="$birth_date"
+            else
+                date="$mod_date"
+            fi
+        elif [[ -n "$birth_date" ]]; then
+            date="$birth_date"
+        elif [[ -n "$mod_date" ]]; then
+            date="$mod_date"
+        fi
     fi
     
     echo "$date"
