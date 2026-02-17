@@ -1,0 +1,22 @@
+# Font & Appearance
+font-size = 14
+theme = Catppuccin Mocha
+
+# Window Behavior
+window-decoration = auto
+window-save-state = always
+confirm-close-surface = true
+quit-after-last-window-closed = false
+
+# Shell Integration
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
+# Clipboard & Selection
+copy-on-select = false
+clipboard-paste-protection = true
+
+# Other
+command = /bin/zsh
+click-repeat-interval = 500
+auto-update-channel = stable
