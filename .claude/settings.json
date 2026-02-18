@@ -2,7 +2,8 @@
   "env": {
     "ANTHROPIC_VERTEX_PROJECT_ID": "claude-code-prod",
     "CLAUDE_CODE_USE_VERTEX": "0",
-    "CLOUD_ML_REGION": "global"
+    "CLOUD_ML_REGION": "global",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "attribution": {
     "pr": ""
@@ -234,21 +235,21 @@
       "Bash(git push*+*)"
     ]
   },
-  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/ccline/ccline",
     "padding": 0
   },
   "enabledPlugins": {
-    "code-review@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true,
     "atlassian@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
     "playground@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
   },
-  "terminalProgressBarEnabled ": true
+  "terminalProgressBarEnabled ": true,
+  "model": "opus"
 }

@@ -1,6 +1,6 @@
 # Font & Appearance
 font-size = 14
-theme = Catppuccin Mocha
+theme = Ghostty Default Style Dark
 
 # Window Behavior
 window-decoration = auto
