@@ -38,6 +38,8 @@ cache_create="" cache_read="" session_id=""
 
 # ANSI color codes
 cyan='\033[36m'
+blue='\033[34m'
+magenta='\033[35m'
 green='\033[32m'
 yellow='\033[33m'
 red='\033[31m'
@@ -47,10 +49,10 @@ reset='\033[0m'
 sep="${dim} | ${reset}"
 
 # --- Model segment ---
-model_seg="${cyan}${model}${reset}"
+model_seg="\xf0\x9f\xa4\x96 ${cyan}${model}${reset}"
 
 # --- Directory segment ---
-dir_seg="$(basename "$dir")"
+dir_seg="\xf0\x9f\x93\x82 ${blue}$(basename "$dir")${reset}"
 
 # --- Git segment (cached, 5s TTL) ---
 git_seg=""
@@ -74,12 +76,15 @@ if [[ -n "$dir" ]] && git -C "$dir" rev-parse --is-inside-work-tree &>/dev/null;
     modified=$(git -C "$dir" diff --numstat 2>/dev/null | wc -l | tr -d ' ')
 
     if [[ -n "$branch" ]]; then
-      git_seg="${branch}"
+      git_seg="\xee\x82\xa0 ${magenta}${branch}${reset}"
       if (( staged > 0 )); then
         git_seg="${git_seg} ${green}+${staged}${reset}"
       fi
       if (( modified > 0 )); then
         git_seg="${git_seg} ${yellow}~${modified}${reset}"
+      fi
+      if (( staged == 0 && modified == 0 )); then
+        git_seg="${git_seg} ${green}\xe2\x9c\x93${reset}"
       fi
     fi
 
@@ -109,7 +114,7 @@ if [[ -n "$used_pct" ]]; then
     pct_color="$green"
   fi
 
-  ctx_seg="${pct_color}${used_pct}%${reset} (${used_k}k/${max_k}k)"
+  ctx_seg="\xe2\x9a\xa1 ${pct_color}${used_pct}% (${used_k}k/${max_k}k)${reset}"
 fi
 
 # --- Assemble output ---
