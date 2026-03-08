@@ -1,9 +1,8 @@
 {
   "env": {
-    "ANTHROPIC_VERTEX_PROJECT_ID": "claude-code-prod",
-    "CLAUDE_CODE_USE_VERTEX": "0",
     "CLOUD_ML_REGION": "global",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1"
   },
   "attribution": {
     "pr": ""
@@ -99,6 +98,9 @@
       "Bash(which:*)",
       "Bash(whoami)",
       "Bash(yq:*)",
+      "mcp__glean__read_document",
+      "mcp__glean__chat",
+      "mcp__glean__search",
       "mcp__plugin_atlassian_atlassian__atlassianUserInfo",
       "mcp__plugin_atlassian_atlassian__getAccessibleAtlassianResources",
       "mcp__plugin_atlassian_atlassian__getConfluencePage",
@@ -235,6 +237,7 @@
       "Bash(git push*+*)"
     ]
   },
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh",
@@ -248,8 +251,12 @@
     "frontend-design@claude-plugins-official": true,
     "playground@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "tldr@confluent": true,
+    "slack-message@confluent": true,
+    "jira@confluent": true,
+    "github-pr-review@confluent": true
   },
   "terminalProgressBarEnabled ": true,
-  "model": "opus"
+  "effortLevel": "high"
 }

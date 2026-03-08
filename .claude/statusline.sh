@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Custom Claude Code status line script
-# Output: Model | Dir | Branch +staged ~modified | usage% (used/max)
+# Format: 🤖 Model | 📂 dir | branch ✓ | ctx%
 
 set -uo pipefail
 
@@ -8,30 +8,27 @@ set -uo pipefail
 INPUT=$(cat)
 
 # Initialize all variables (protect against set -u with partial reads)
-model="" dir="" used_pct="" ctx_size="" input_tokens="" output_tokens=""
-cache_create="" cache_read="" session_id=""
+model_id="" model_name="" dir="" used_pct="" remaining_pct="" used_tokens="" total_tokens="" session_id=""
 
-# Extract all needed fields in one jq call (one per line for bash 3.2 compat)
+# Extract all needed fields in one jq call
 {
-  read -r model
+  read -r model_id
+  read -r model_name
   read -r dir
   read -r used_pct
-  read -r ctx_size
-  read -r input_tokens
-  read -r output_tokens
-  read -r cache_create
-  read -r cache_read
+  read -r remaining_pct
+  read -r used_tokens
+  read -r total_tokens
   read -r session_id
 } < <(
   echo "$INPUT" | jq -r '
+    (.model.id // ""),
     (.model.display_name // ""),
     (.workspace.current_dir // ""),
     (.context_window.used_percentage // ""),
-    (.context_window.context_window_size // ""),
-    (.context_window.current_usage.input_tokens // ""),
-    (.context_window.current_usage.output_tokens // ""),
-    (.context_window.current_usage.cache_creation_input_tokens // ""),
-    (.context_window.current_usage.cache_read_input_tokens // ""),
+    (.context_window.remaining_percentage // ""),
+    (.context_window.used_tokens // ""),
+    (.context_window.total_tokens // ""),
     (.session_id // "")
   ' 2>/dev/null
 )
@@ -46,17 +43,23 @@ red='\033[31m'
 dim='\033[2m'
 reset='\033[0m'
 
-sep="${dim} | ${reset}"
+sep="${dim}|${reset}"
 
 # --- Model segment ---
-model_seg="\xf0\x9f\xa4\x96 ${cyan}${model}${reset}"
+short_model="$model_name"
+short_model="${short_model#Claude }"   # strip leading "Claude "
+model_seg="🤖 ${cyan}${short_model}${reset}"
 
-# --- Directory segment ---
-dir_seg="\xf0\x9f\x93\x82 ${blue}$(basename "$dir")${reset}"
+# --- Directory segment: basename, truncated to 20 chars ---
+dir_name="$(basename "$dir")"
+if (( ${#dir_name} > 20 )); then
+  dir_name="${dir_name:0:17}..."
+fi
+dir_seg="📂 ${blue}${dir_name}${reset}"
 
 # --- Git segment (cached, 5s TTL) ---
 git_seg=""
-if [[ -n "$dir" ]] && git -C "$dir" rev-parse --is-inside-work-tree &>/dev/null; then
+if [[ -n "$dir" ]] && git -C "$dir" rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   cache_file="/tmp/statusline-git-cache-${session_id:-$$}"
   now=$(date +%s)
   use_cache=false
@@ -71,12 +74,14 @@ if [[ -n "$dir" ]] && git -C "$dir" rev-parse --is-inside-work-tree &>/dev/null;
   if $use_cache; then
     git_seg=$(cat "$cache_file")
   else
-    branch=$(git -C "$dir" symbolic-ref --short HEAD 2>/dev/null || git -C "$dir" rev-parse --short HEAD 2>/dev/null || echo "")
+    branch=$(git -C "$dir" symbolic-ref --short HEAD 2>/dev/null \
+             || git -C "$dir" rev-parse --short HEAD 2>/dev/null \
+             || echo "")
     staged=$(git -C "$dir" diff --cached --numstat 2>/dev/null | wc -l | tr -d ' ')
     modified=$(git -C "$dir" diff --numstat 2>/dev/null | wc -l | tr -d ' ')
 
     if [[ -n "$branch" ]]; then
-      git_seg="\xee\x82\xa0 ${magenta}${branch}${reset}"
+      git_seg=" ${magenta}${branch}${reset}"
       if (( staged > 0 )); then
         git_seg="${git_seg} ${green}+${staged}${reset}"
       fi
@@ -84,48 +89,49 @@ if [[ -n "$dir" ]] && git -C "$dir" rev-parse --is-inside-work-tree &>/dev/null;
         git_seg="${git_seg} ${yellow}~${modified}${reset}"
       fi
       if (( staged == 0 && modified == 0 )); then
-        git_seg="${git_seg} ${green}\xe2\x9c\x93${reset}"
+        git_seg="${git_seg} ${green}✓${reset}"
       fi
     fi
 
-    # Write raw (with ANSI codes) to cache
+    # Write to cache (with ANSI codes)
     printf '%b' "$git_seg" > "$cache_file"
   fi
 fi
 
-# --- Context segment ---
+# --- Context segment: show remaining % with color and ⚡ ---
 ctx_seg=""
-if [[ -n "$used_pct" ]]; then
-  # Token count: input + cache_creation + cache_read (matches official formula)
-  total_tokens=0
-  [[ -n "$input_tokens" ]] && total_tokens=$(( total_tokens + input_tokens ))
-  [[ -n "$cache_create" ]] && total_tokens=$(( total_tokens + cache_create ))
-  [[ -n "$cache_read" ]] && total_tokens=$(( total_tokens + cache_read ))
+if [[ -n "$used_pct" && "$used_pct" != "null" ]]; then
+  used_int=${used_pct%.*}   # truncate to integer
+  used_int=${used_int:-0}
 
-  used_k=$(( (total_tokens + 500) / 1000 ))
-  max_k=$(( (ctx_size + 500) / 1000 ))
-
-  # Color by usage percentage
-  if (( used_pct >= 90 )); then
+  if (( used_int >= 90 )); then
     pct_color="$red"
-  elif (( used_pct >= 70 )); then
+  elif (( used_int >= 70 )); then
     pct_color="$yellow"
   else
     pct_color="$green"
   fi
 
-  ctx_seg="\xe2\x9a\xa1 ${pct_color}${used_pct}% (${used_k}k/${max_k}k)${reset}"
+  # Format token counts as compact "Xk/Yk"
+  token_info=""
+  if [[ -n "$used_tokens" && "$used_tokens" != "null" && -n "$total_tokens" && "$total_tokens" != "null" ]]; then
+    used_k=$(( used_tokens / 1000 ))
+    total_k=$(( total_tokens / 1000 ))
+    token_info=" ${dim}(${used_k}k/${total_k}k)${reset}"
+  fi
+
+  ctx_seg="⚡ ${pct_color}${used_int}%${reset}${token_info}"
 fi
 
 # --- Assemble output ---
-output="${model_seg}${sep}${dir_seg}"
+output="${model_seg} ${sep} ${dir_seg}"
 
 if [[ -n "$git_seg" ]]; then
-  output="${output}${sep}${git_seg}"
+  output="${output} ${sep}${git_seg}"
 fi
 
 if [[ -n "$ctx_seg" ]]; then
-  output="${output}${sep}${ctx_seg}"
+  output="${output} ${sep} ${ctx_seg}"
 fi
 
 printf '%b' "$output"
