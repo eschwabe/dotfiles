@@ -8,7 +8,7 @@ set -uo pipefail
 INPUT=$(cat)
 
 # Initialize all variables (protect against set -u with partial reads)
-model_id="" model_name="" dir="" used_pct="" remaining_pct="" used_tokens="" total_tokens="" session_id=""
+model_id="" model_name="" dir="" used_pct="" remaining_pct="" ctx_input_tokens="" ctx_window_size="" session_id=""
 
 # Extract all needed fields in one jq call
 {
@@ -17,8 +17,8 @@ model_id="" model_name="" dir="" used_pct="" remaining_pct="" used_tokens="" tot
   read -r dir
   read -r used_pct
   read -r remaining_pct
-  read -r used_tokens
-  read -r total_tokens
+  read -r ctx_input_tokens
+  read -r ctx_window_size
   read -r session_id
 } < <(
   echo "$INPUT" | jq -r '
@@ -27,8 +27,11 @@ model_id="" model_name="" dir="" used_pct="" remaining_pct="" used_tokens="" tot
     (.workspace.current_dir // ""),
     (.context_window.used_percentage // ""),
     (.context_window.remaining_percentage // ""),
-    (.context_window.used_tokens // ""),
-    (.context_window.total_tokens // ""),
+    ((.context_window.current_usage.input_tokens // 0)
+      + (.context_window.current_usage.cache_creation_input_tokens // 0)
+      + (.context_window.current_usage.cache_read_input_tokens // 0)
+      | if . == 0 then "" else . end),
+    (.context_window.context_window_size // ""),
     (.session_id // "")
   ' 2>/dev/null
 )
@@ -114,10 +117,11 @@ if [[ -n "$used_pct" && "$used_pct" != "null" ]]; then
 
   # Format token counts as compact "Xk/Yk"
   token_info=""
-  if [[ -n "$used_tokens" && "$used_tokens" != "null" && -n "$total_tokens" && "$total_tokens" != "null" ]]; then
-    used_k=$(( used_tokens / 1000 ))
-    total_k=$(( total_tokens / 1000 ))
-    token_info=" ${dim}(${used_k}k/${total_k}k)${reset}"
+  if [[ -n "$ctx_input_tokens" && "$ctx_input_tokens" != "null" && -n "$ctx_window_size" && "$ctx_window_size" != "null" ]]; then
+    used_k=$(( ctx_input_tokens / 1000 ))
+    total_k=$(( ctx_window_size / 1000 ))
+    [[ $used_k -eq 0 ]] && used_label="<1k" || used_label="${used_k}k"
+    token_info=" ${dim}(${used_label}/${total_k}k)${reset}"
   fi
 
   ctx_seg="⚡ ${pct_color}${used_int}%${reset}${token_info}"
