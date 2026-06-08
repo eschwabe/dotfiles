@@ -10,7 +10,7 @@ Dotfiles are installed using git commands. See this tutorial for details https:/
 ```bash
 git clone --bare https://github.com/eschwabe/dotfiles.git $HOME/.dotfiles
 
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 dotfiles checkout
 
