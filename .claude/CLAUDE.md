@@ -20,7 +20,6 @@
 # GitHub Pull Requests
 - Create all PRs as drafts using the '--draft' option of 'gh pr create'
 - When creating a new feature branch, always prefix the branch name with the GitHub username followed by a '/' character
-- If the feature branch corresponds to a Jira ticket, include the Jira issue id at the beginning of the pull request title surrounded by brackets.
 
 ## Pull Request Descriptions
 - Keep descriptions concise and high-level. Don't mention specific files or functions — those are obvious from the diff.
@@ -28,7 +27,6 @@
 - Generate the PR body in a markdown code block so raw markdown can be easily copied.
 
 ## Pull Request Reviews
-- Look up the associated Jira issue for context before reviewing.
 - Read project READMEs before reviewing changes.
 - Process review feedback systematically — wait for user input before implementing significant changes.
 
@@ -36,6 +34,3 @@
 - Use a collaborative tone. Frame issues as improvement opportunities, not failures.
 - Match detail level to issue complexity — brief for simple issues, detailed with reasoning for complex ones.
 - Always escape backticks in `gh api` body arguments to prevent shell substitution.
-
-# Python
-- Use `uv` instead of `pip` or `pip3` for Python package operations (e.g., `uv pip install`, `uv pip show`, `uv run`).
